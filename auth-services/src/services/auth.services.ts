@@ -1,8 +1,12 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { User } from "../models/user.model";
+import { generateAccessToken, generateRefreshToken } from "../utils/token.util";
 
-export const registerUser = async (name: string, email: string, password: string) => {
+export const registerUser = async (
+  name: string,
+  email: string,
+  password: string
+) => {
   const exists = await User.findOne({ email });
   if (exists) throw new Error("User already exists");
 
@@ -11,7 +15,7 @@ export const registerUser = async (name: string, email: string, password: string
   const newUser = await User.create({
     name,
     email,
-    password: hashedPassword
+    password: hashedPassword,
   });
 
   return newUser;
@@ -24,11 +28,8 @@ export const loginUser = async (email: string, password: string) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Invalid credentials");
 
-  const token = jwt.sign(
-    { id: user._id, email: user.email },
-    process.env.JWT_SECRET as string,
-    { expiresIn: "7d" }
-  );
+  const accessToken = generateAccessToken(user._id.toString());
+  const refreshToken = generateRefreshToken(user._id.toString());
 
-  return { user, token };
+  return { user, accessToken, refreshToken };
 };
