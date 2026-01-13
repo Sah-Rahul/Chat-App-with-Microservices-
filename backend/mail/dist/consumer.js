@@ -12,7 +12,7 @@ export const startOtpConsumer = async () => {
             password: process.env.RABBITMQ_PASS || "guest",
         });
         const channel = await connection.createChannel();
-        const queueName = "send-otp";
+        const queueName = "send_otp";
         await channel.assertQueue(queueName, { durable: true });
         console.log("✅ Mail consumer started, listening for OTP emails...");
         const transporter = nodemailer.createTransport({
@@ -40,12 +40,12 @@ export const startOtpConsumer = async () => {
             }
             catch (error) {
                 console.error("❌ Failed to send OTP email:", error);
-                channel.ack(msg);
+                channel.nack(msg, false, false);
             }
         });
     }
     catch (error) {
-        console.error("❌ RabbitMQ / Mail consumer failed:", error);
+        console.error("❌ RabbitMQ  Mail consumer failed:", error);
     }
 };
 //# sourceMappingURL=consumer.js.map

@@ -1,7 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
+import { startOtpConsumer } from "./consumer.js";
 
 dotenv.config();
+
+startOtpConsumer()
 
 const app = express();
 const PORT = process.env.PORT || 5000;

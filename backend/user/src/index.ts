@@ -1,28 +1,33 @@
-import express, { type Request, type Response } from "express";
+import express, { urlencoded, type Request, type Response } from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import { createClient } from "redis";
 import userRouter from "./routes/user.routes.js";
 import { connectRabbitMQ } from "./config/rabbitmq.js";
+import cors from "cors"
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-export const ConnectRedis = createClient({
+export const redisClient = createClient({
   url: process.env.REDIS_URL as string,
 });
 
-ConnectRedis.on("error", (err) => console.log("Redis Client Error", err));
+redisClient.on("error", (err) => console.log("Redis Client Error", err));
 
-await ConnectRedis.connect();
+await redisClient.connect();
 console.log("✅ Redis connected");
 
 connectRabbitMQ();
 
 // Middleware
+app.use(cors({
+  origin: process.env.CLIENT
+}))
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
@@ -31,8 +36,9 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.use("api/v1", userRouter);
-// Start Server
+app.use("/api/v1", userRouter);
+
+
 const startServer = async () => {
   await connectDB();
 
