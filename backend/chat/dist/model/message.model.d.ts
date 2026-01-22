@@ -69,10 +69,7 @@ declare const messageModal: mongoose.Model<IMessage, {}, {}, {
     }, "id"> & {
         id: string;
     }>;
-    image?: mongoose.SchemaDefinitionProperty<{
-        url: string;
-        publicId: string;
-    } | undefined, IMessage, mongoose.Document<unknown, {}, IMessage, {
+    chatId?: mongoose.SchemaDefinitionProperty<Types.ObjectId, IMessage, mongoose.Document<unknown, {}, IMessage, {
         id: string;
     }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<IMessage & Required<{
         _id: Types.ObjectId;
@@ -81,7 +78,10 @@ declare const messageModal: mongoose.Model<IMessage, {}, {}, {
     }, "id"> & {
         id: string;
     }>;
-    chatId?: mongoose.SchemaDefinitionProperty<Types.ObjectId, IMessage, mongoose.Document<unknown, {}, IMessage, {
+    image?: mongoose.SchemaDefinitionProperty<{
+        url: string;
+        publicId: string;
+    } | undefined, IMessage, mongoose.Document<unknown, {}, IMessage, {
         id: string;
     }, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & Omit<IMessage & Required<{
         _id: Types.ObjectId;
