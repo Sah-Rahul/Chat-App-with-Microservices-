@@ -1,11 +1,23 @@
-// import express from "express";
-// import { validate } from "../middlewares/validate.middleware";
-// import { CreateUserSchema, LoginSchema } from "../validations/user.validation";
-// import { createUser, login } from "../controllers/user.controller";
+import express from "express";
+import {
+  changePassword,
+  forgotPassword,
+  loginUser,
+  logOutUser,
+  myProfile,
+  registerUser,
+  updateProfile,
+} from "../controller/user.controller";
+import { isAuthenticated } from "../middlewares/auth.middleware";
 
-// const router = express.Router();
+const authRouter = express.Router();
 
-// router.post("/register", validate(CreateUserSchema), createUser);
-// router.post("/login", validate(LoginSchema), login);
+authRouter.post("/register", registerUser);
+authRouter.post("/login", loginUser);
+authRouter.get("/me",isAuthenticated, myProfile);
+authRouter.post("/logout", isAuthenticated, logOutUser);
+authRouter.put("/update-profile", isAuthenticated, updateProfile);
+authRouter.patch("/forgot-password", forgotPassword);
+authRouter.put("/change-password", isAuthenticated, changePassword);
 
-// export default router;
+export default authRouter;
