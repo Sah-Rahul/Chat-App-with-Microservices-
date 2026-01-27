@@ -43,6 +43,7 @@ export interface IUser extends Document {
   role: UserRole;
   phone: string;
   address: string;
+  profilePicture: string;
   gender: Gender;
   isActive: boolean;
   accountStatus: AccountStatus;
@@ -74,6 +75,7 @@ const UserSchema = new Schema<IUser>(
     },
     phone: String,
     address: String,
+    profilePicture: String,
     gender: {
       type: String,
       enum: Object.values(Gender),

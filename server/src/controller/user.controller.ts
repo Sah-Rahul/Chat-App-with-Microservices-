@@ -14,8 +14,10 @@ import {
 } from "../validation/user.validation";
 import { UserModel } from "../models/user.mode";
 import { OtpModel } from "../models/otp.model";
-import { sendEmail } from "../EmailTemplates/sendEmail"; 
+import { sendEmail } from "../EmailTemplates/sendEmail";
 import { forgotPasswordEmailTemplate } from "../EmailTemplates/forgotEmailEmailTemplate";
+import { generateWelcomeEmailTemplate } from "../EmailTemplates/welcomEmailTemplates";
+import { uploadToCloudinary } from "../config/cloudinary.config";
 
 export const registerUser = asyncHandler(
   async (req: Request, res: Response) => {
@@ -41,6 +43,16 @@ export const registerUser = asyncHandler(
       role: "student",
       isActive: true,
       accountStatus: "active",
+    });
+
+    const emailHtml = generateWelcomeEmailTemplate({
+      userName: name,
+      dashboardUrl: `${process.env.CLIENT}/dashboard`,
+    });
+    await sendEmail({
+      email: user.email,
+      subject: "Verify Your Email - Meridian University",
+      html: emailHtml,
     });
 
     return res
@@ -103,19 +115,37 @@ export const myProfile = asyncHandler(
 );
 
 export const updateProfile = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+  async (req: AuthRequest & { file?: Express.Multer.File }, res: Response) => {
     const parsed = UpdateUserSchema.safeParse(req.body);
     if (!parsed.success) throw parsed.error;
 
-    const user = await UserModel.findByIdAndUpdate(req.user?.id, parsed.data, {
+    const userId = req.user?.id;
+    if (!userId) throw new ApiError(401, "Unauthorized");
+
+    let profilePicture: string | undefined;
+    if (req.file) {
+      try {
+        const result = await uploadToCloudinary(req.file.buffer, "users");
+        profilePicture = result.secure_url;
+      } catch (err) {
+        console.error("Cloudinary upload error:", err);
+        throw new ApiError(500, "Failed to upload profile image");
+      }
+    }
+
+    const updateData: any = { ...parsed.data };
+    if (profilePicture) updateData.profilePicture = profilePicture;
+
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, updateData, {
       new: true,
+      runValidators: true,
     }).select("-password");
 
-    if (!user) throw new ApiError(404, "User not found");
+    if (!updatedUser) throw new ApiError(404, "User not found");
 
     res
       .status(200)
-      .json(new ApiResponse(200, user, "Profile updated successfully"));
+      .json(new ApiResponse(200, updatedUser, "Profile updated successfully"));
   },
 );
 

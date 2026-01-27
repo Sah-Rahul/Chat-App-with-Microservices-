@@ -42,7 +42,6 @@ export const UpdateUserSchema = z.object({
   phone: z.string().min(10).max(15).optional(),
   address: z.string().optional(),
   profilePicture: z.string().url().optional(),
-  gender: GenderEnum.optional(),
 });
 
  
