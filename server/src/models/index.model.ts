@@ -1,0 +1,8 @@
+import "./admin.model"
+import "./course.mode"
+import "./department.model"
+import "./otp.model"
+import "./staff.mode"
+import "./subject.model"
+import "./teacher.model"
+import "./user.mode"

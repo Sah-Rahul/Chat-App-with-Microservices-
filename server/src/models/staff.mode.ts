@@ -38,22 +38,22 @@ const StaffSchema = new Schema<IStaff>(
     name: {
       type: String,
       required: true,
-      unique: true,
+      // ❌ unique removed (names can repeat)
     },
     employeeId: {
       type: String,
       required: [true, "Employee ID is required"],
-      unique: true,
+      unique: true, // ✅ single index
       uppercase: true,
     },
     department: {
       type: String,
       enum: Object.values(StaffDepartment),
-      required: [true, "Department is required"],
+      required: true,
     },
     designation: {
       type: String,
-      required: [true, "Designation is required"],
+      required: true,
       trim: true,
     },
     shift: {
@@ -63,34 +63,25 @@ const StaffSchema = new Schema<IStaff>(
     },
     salary: {
       type: Number,
-      required: [true, "Salary is required"],
+      required: true,
       min: 0,
     },
     joiningDate: {
       type: Date,
-      required: [true, "Joining date is required"],
+      required: true,
     },
     exitDate: Date,
     isActive: {
       type: Boolean,
       default: true,
     },
-    profilePicture: {
-      type: String,
-    },
+    profilePicture: String,
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
-// Indexes
-StaffSchema.index({ employeeId: 1 });
-StaffSchema.index({ user: 1 });
+ 
 StaffSchema.index({ department: 1 });
 StaffSchema.index({ isActive: 1 });
 
-export const Staff: Model<IStaff> = mongoose.model<IStaff>(
-  "Staff",
-  StaffSchema,
-);
+export const Staff = mongoose.model<IStaff>("Staff", StaffSchema);

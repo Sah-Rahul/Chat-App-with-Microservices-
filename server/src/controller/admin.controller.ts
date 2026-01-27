@@ -11,7 +11,6 @@ import {
   AccountStatus,
   BlockReason,
   UserModel,
-  UserRole,
 } from "../models/user.mode";
 import { AuthRequest } from "../middlewares/auth.middleware";
 import {
@@ -29,8 +28,7 @@ import {
 import jwt from "jsonwebtoken";
 import { AdminLevel, AdminModel, IAdmin } from "../models/admin.model";
 
-export const adminRegister = asyncHandler(
-  async (req: Request, res: Response) => {
+export const adminRegister = asyncHandler(async (req: Request, res: Response) => {
     const parsed = AdminRegisterSchema.safeParse(req.body);
     if (!parsed.success) {
       const errors = parsed.error.issues.map(
@@ -109,8 +107,7 @@ export const adminLogout = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "Logged out successfully" });
 });
 
-export const adminMyProfile = asyncHandler(
-  async (req: Request & { user?: IAdmin }, res: Response) => {
+export const adminMyProfile = asyncHandler(async (req: Request & { user?: IAdmin }, res: Response) => {
     const admin = req.user;
     if (!admin) throw new ApiError(404, "Admin not found");
 
@@ -179,8 +176,8 @@ export const addStaff = asyncHandler(async (req: Request, res: Response) => {
     .status(201)
     .json(new ApiResponse(201, staff, "Staff member added successfully"));
 });
-export const promoteTeacher = asyncHandler(
-  async (req: Request, res: Response) => {
+
+export const promoteTeacher = asyncHandler(async (req: Request, res: Response) => {
     const teacherId = req.params.id;
     if (!teacherId) throw new ApiError(400, "Invalid teacher ID");
 
@@ -214,8 +211,7 @@ export const promoteTeacher = asyncHandler(
   },
 );
 
-export const promoteStaff = asyncHandler(
-  async (req: Request, res: Response) => {
+export const promoteStaff = asyncHandler(async (req: Request, res: Response) => {
     const staffId = req.params.id;
     if (!staffId) throw new ApiError(400, "Invalid staff ID");
 
@@ -249,8 +245,7 @@ export const promoteStaff = asyncHandler(
   },
 );
 
-export const blockUser = asyncHandler(
-  async (req: AuthRequest, res: Response) => {
+export const blockUser = asyncHandler(async (req: AuthRequest, res: Response) => {
     const userId = req.params.id;
     const { reason, blockedTill, remarks } = req.body;
 
@@ -295,8 +290,7 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-export const getAllTeacher = asyncHandler(
-  async (req: Request, res: Response) => {
+export const getAllTeacher = asyncHandler(async (req: Request, res: Response) => {
     const teachers = await TeacherModel.find()
       .populate("department", "name code")
       .populate("subjects", "name code")
@@ -336,7 +330,6 @@ export const getStaffById = asyncHandler(async (req: Request, res: Response) => 
   res.status(200).json(new ApiResponse(200, staff, "User fetched successfully"));
 });
 
-
 export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
   const users = await UserModel.find()
     .select("-password")
@@ -356,10 +349,8 @@ export const getUserById = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json(new ApiResponse(200, user, "User fetched successfully"));
 });
 
-export const approveAdmission = asyncHandler(
-  async (req: Request, res: Response) => {},
+export const approveAdmission = asyncHandler(async (req: Request, res: Response) => {},
 );
 
-export const rejectAdmission = asyncHandler(
-  async (req: Request, res: Response) => {},
+export const rejectAdmission = asyncHandler(async (req: Request, res: Response) => {},
 );

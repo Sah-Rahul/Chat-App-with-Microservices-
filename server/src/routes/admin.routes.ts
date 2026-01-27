@@ -14,6 +14,8 @@ import {
   adminLogin,
   adminLogout,
   adminMyProfile,
+  getStaffById,
+  getTeacherById,
 } from "../controller/admin.controller";
 
 import { isAuthenticated } from "../middlewares/auth.middleware";
@@ -34,7 +36,6 @@ adminRoutes.post(
   addTeacher,
 );
 
-adminRoutes.get("/teacher", isAdmin, getAllTeacher);
 
 adminRoutes.patch(
   "/teacher/:id/promote",
@@ -50,18 +51,22 @@ adminRoutes.post(
   addStaff,
 );
 
-adminRoutes.get("/staff", isAuthenticated, isAdmin, getAllStaff);
+adminRoutes.get("/staff", isAdmin, getAllStaff);
 
-adminRoutes.patch("/staff/:id/promote", isAuthenticated, isAdmin, promoteStaff);
+adminRoutes.get("/staff/:id", isAdmin, getStaffById);
 
-/* ===================== USERS ===================== */
+adminRoutes.get("/users", isAdmin, getAllUsers);
 
-adminRoutes.get("/users", isAuthenticated, isAdmin, getAllUsers);
+adminRoutes.get("/users/:id", isAdmin, getUserById); 
 
-adminRoutes.get("/users/:id", isAuthenticated, isAdmin, getUserById);
+adminRoutes.get("/teacher", isAdmin, getAllTeacher);
 
-adminRoutes.patch("/users/:id/block", isAuthenticated, isAdmin, blockUser);
+adminRoutes.get("/teacher/:id", isAdmin, getTeacherById);
 
-adminRoutes.delete("/users/:id", isAuthenticated, isAdmin, deleteUser);
+adminRoutes.patch("/staff/:id/promote", isAdmin, promoteStaff);
+
+adminRoutes.patch("/users/:id/block", isAdmin, blockUser);
+
+adminRoutes.delete("/users/:id", isAdmin, deleteUser);
 
 export default adminRoutes;

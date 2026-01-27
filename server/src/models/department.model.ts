@@ -9,8 +9,6 @@ export interface IDepartment extends Document {
   totalStudents: number;
   totalTeachers: number;
   isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const DepartmentSchema = new Schema<IDepartment>(
@@ -18,14 +16,14 @@ const DepartmentSchema = new Schema<IDepartment>(
     name: {
       type: String,
       enum: Object.values(CollegeDepartment),
-      required: [true, "Department name is required"],
-      unique: true,
+      required: true,
+      unique: true, // ✅ index here
       trim: true,
     },
     code: {
       type: String,
-      required: [true, "Department code is required"],
-      unique: true,
+      required: true,
+      unique: true, // ✅ index here
       uppercase: true,
       trim: true,
     },
@@ -47,15 +45,11 @@ const DepartmentSchema = new Schema<IDepartment>(
       default: true,
     },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
-// Indexes
-DepartmentSchema.index({ code: 1 });
-
-export const Department: Model<IDepartment> = mongoose.model<IDepartment>(
+ 
+export const Department = mongoose.model<IDepartment>(
   "Department",
   DepartmentSchema,
 );
