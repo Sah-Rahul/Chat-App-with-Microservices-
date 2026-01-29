@@ -2,9 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import errorMiddleware from "./middlewares/error.middleware";
-import authRouter from "./routes/user.routes";
-import adminRoutes from "./routes/admin.routes";
-import teacherRoutes from "./routes/teacher.routes";
+import appRoute from "./routes";
 
 const app = express();
 
@@ -25,10 +23,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Server is running 🚀" });
 });
 
-app.use("/api/v1/auth",authRouter)
-app.use("/api/v1/admin",adminRoutes)
-app.use("/api/v1/teacher",teacherRoutes)
-
+app.use(appRoute)
 
 app.use(errorMiddleware)
 

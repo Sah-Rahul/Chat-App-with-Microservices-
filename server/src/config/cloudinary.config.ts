@@ -1,15 +1,12 @@
 import { v2 as cloudinary } from "cloudinary";
-import dotenv from "dotenv"
-dotenv.config()
-
+import dotenv from "dotenv";
+dotenv.config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
-export default cloudinary;
 
 export interface CloudinaryUploadResult {
   secure_url: string;
@@ -24,7 +21,7 @@ export const uploadToCloudinary = (fileBuffer: Buffer, folder: string) =>
       (err, result) => {
         if (err || !result) return reject(err);
         resolve(result as CloudinaryUploadResult);
-      }
+      },
     );
     stream.end(fileBuffer);
   });

@@ -11,7 +11,4 @@ teacherRoutes.get("/profile",isTeacher, teacherProfile)
 teacherRoutes.patch("/change-password",isTeacher, changeTeacherPassword)
 teacherRoutes.put("/update-profile",isTeacher, upload.single("profilePicture"), updateTeacherProfile)
 
-
-
-
 export default teacherRoutes
