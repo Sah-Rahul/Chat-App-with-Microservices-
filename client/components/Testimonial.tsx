@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
- 
-import testImg1 from "../public/images/test2.jpg"; 
+import testImg1 from "../public/images/test2.jpg";
 import team2 from "../public/images/team2.png";
 import team3 from "../public/images/team3.png";
-import wave from "../public/images/wave3.png"
+import wave from "../public/images/wave3.png";
+import spin from "../public/images/spin.png";
 
 const Testimonial = () => {
   const [current, setCurrent] = useState(0);
@@ -78,7 +78,6 @@ const Testimonial = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
           <div className="space-y-6">
             <span className="bg-[#CDF0EA]  text-[#0AB99D] px-6 py-2 rounded-md font-bold text-sm uppercase tracking-wider">
               Testimonial
@@ -131,14 +130,16 @@ const Testimonial = () => {
                 </p>
               </div>
             </div>
+           
           </div>
-
+           <div className="absolute top-5 right-2">
+              <Image src={spin} alt="spin" className="rotate-spin" />
+            </div>
         </div>
-
       </div>
 
       <div className="absolute -bottom-24 left-0">
-        <Image src={wave} alt="wave"/>
+        <Image src={wave} alt="wave" />
       </div>
     </div>
   );
