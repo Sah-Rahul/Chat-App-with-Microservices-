@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import dottedImg from "../public/images/dotted.png";
-import react from "../public/images/react.png";
-import react2 from "../public/images/react2.png";
-import Learner from "../public/images/Learners.jpg";
+import dottedImg from "../../public/images/dotted.png";
+import react from "../../public/images/react.png";
+import react2 from "../../public/images/react2.png";
+import Learner from "../../public/images/Learners.jpg";
 import { Check } from "lucide-react";
 
 const WhyChooseUs = () => {

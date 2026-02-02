@@ -1,19 +1,19 @@
 "use client";
 
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../../components/ui/button";
 import Image, { StaticImageData } from "next/image";
 import CourseCard from "./CourseCard";
 import { ArrowRight } from "lucide-react";
 
 // Images
-import shapeImg from "../public/course/shape-2.webp";
-import DataScience from "../public/course/course1.jpg";
-import AdobeIllustrator from "../public/course/course2.jpg";
-import BusinessAnalysis from "../public/course/course3.jpg";
-import Teacher from "../public/images/team1.png";
-import courseLine from "../public/images/courseLine.png";
-import spin from "../public/images/spin.png";
+import shapeImg from "../../public/course/shape-2.webp";
+import DataScience from "../../public/course/course1.jpg";
+import AdobeIllustrator from "../../public/course/course2.jpg";
+import BusinessAnalysis from "../../public/course/course3.jpg";
+import Teacher from "../../public/images/team1.png";
+import courseLine from "../../public/images/courseLine.png";
+import spin from "../../public/images/spin.png";
 
 export interface CourseI {
   image: StaticImageData;

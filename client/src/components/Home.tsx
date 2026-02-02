@@ -1,6 +1,6 @@
 import Image from "next/image";
-import bgImage from "../public/images/bg.webp";
-import girlImg from "../public/images/hero-3.webp";
+import bgImage from "../../public/images/bg.webp";
+import girlImg from "../../public/images/hero-3.webp";
 
 const Home = () => {
   return (

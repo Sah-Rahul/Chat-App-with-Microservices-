@@ -128,3 +128,24 @@
   background-color: #0ab99d;
   color: #ffffff;
 }
+
+
+/* Scrollbar Track */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 16px;
+}
+
+/* Scrollbar Thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #217eca;
+  background-color: #0BB69B;
+  border-radius: 9999px;
+  border: 2px solid white;
+}
+
+/* On Hover */
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background-color: #0BB69B;
+}

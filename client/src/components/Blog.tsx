@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, MessageCircle } from "lucide-react";
 
-import blog1 from "../public/course/course1.jpg";
-import blog2 from "../public/course/course2.jpg";
-import blog3 from "../public/course/course3.jpg";
+import blog1 from "../../public/course/course1.jpg";
+import blog2 from "../../public/course/course2.jpg";
+import blog3 from "../../public/course/course3.jpg";
 
 const blogData = [
   {

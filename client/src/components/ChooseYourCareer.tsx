@@ -3,13 +3,13 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-import student1 from "../public/images/career1.png";
-import student2 from "../public/images/career2.png";
-import courseLine from "../public/images/courseLine.png";
-import wave from "../public/images/wave2.png";
-import spin from "../public/images/spin.png";
-import spin1 from "../public/images/spin1.png";
-import moveImg from "../public/images/move.png";
+import student1 from "../../public/images/career1.png";
+import student2 from "../../public/images/career2.png";
+import courseLine from "../../public/images/courseLine.png";
+import wave from "../../public/images/wave2.png";
+import spin from "../../public/images/spin.png";
+import spin1 from "../../public/images/spin1.png";
+import moveImg from "../../public/images/move.png";
 
 const ChooseYourCareer = () => {
   return (

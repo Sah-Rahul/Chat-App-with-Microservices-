@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import Newsletter1 from "../public/images/Newsletter1.png";
-import Newsletter2 from "../public/images/Newsletter2.png";
-import spin from "../public/images/whiteSpin.png";
-import moveImg from "../public/images/whiteMove.png";
+import Newsletter1 from "../../public/images/Newsletter1.png";
+import Newsletter2 from "../../public/images/Newsletter2.png";
+import spin from "../../public/images/whiteSpin.png";
+import moveImg from "../../public/images/whiteMove.png";
 
 const Newsletter = () => {
   return (

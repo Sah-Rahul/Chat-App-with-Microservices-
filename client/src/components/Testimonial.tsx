@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
-import testImg1 from "../public/images/test2.jpg";
-import team2 from "../public/images/team2.png";
-import team3 from "../public/images/team3.png";
-import wave from "../public/images/wave3.png";
-import spin from "../public/images/spin.png";
+import testImg1 from "../../public/images/test2.jpg";
+import team2 from "../../public/images/team2.png";
+import team3 from "../../public/images/team3.png";
+import wave from "../../public/images/wave3.png";
+import spin from "../../public/images/spin.png";
 
 const Testimonial = () => {
 

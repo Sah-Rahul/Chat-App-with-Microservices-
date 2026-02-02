@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../../components/ui/button";
 import {
   ArrowRight,
   Share2,
@@ -10,13 +10,13 @@ import {
   Instagram,
 } from "lucide-react";
 
-import team1 from "../public/images/team1.png";
-import team2 from "../public/images/team2.png";
-import team3 from "../public/images/team3.png";
-import team1_alt from "../public/images/team1.png";
-import moveImg from "../public/images/move.png";
-import spin from "../public/images/spin.png";
-import spin2 from "../public/images/spin1.png";
+import team1 from "../../public/images/team1.png";
+import team2 from "../../public/images/team2.png";
+import team3 from "../../public/images/team3.png";
+import team1_alt from "../../public/images/team1.png";
+import moveImg from "../../public/images/move.png";
+import spin from "../../public/images/spin.png";
+import spin2 from "../../public/images/spin1.png";
 
 const Instructor = () => {
   const instructors = [

@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import dottedImg from "../public/images/dotted.png";
-import growImg from "../public/images/Grow3.png";
-import growImg2 from "../public/images/Grow2.jpg";
-import growImg4 from "../public/images/grow4.jpg";
-import reactImg from "../public/images/reactangle.png";
-import spin from "../public/images/spin.png";
-import { Button } from "./ui/button";
+import dottedImg from "../../public/images/dotted.png";
+import growImg from "../../public/images/Grow3.png";
+import growImg2 from "../../public/images/Grow2.jpg";
+import growImg4 from "../../public/images/grow4.jpg";
+import reactImg from "../../public/images/reactangle.png";
+import spin from "../../public/images/spin.png";
+import { Button } from "../../components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 const AboutUs = () => {

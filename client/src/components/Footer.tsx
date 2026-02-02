@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Facebook, Instagram, Twitter, ChevronRight } from "lucide-react";
-import logo from "../public/images/logo.webp";
+import logo from "../../public/images/logo.webp";
 import Link from "next/link";
 
 const Footer = () => {

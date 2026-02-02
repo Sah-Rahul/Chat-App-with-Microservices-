@@ -1,12 +1,12 @@
 import CategoryCard from "./CategoryCard";
-import artImg from "../public/categories/art.png";
-import barsImg from "../public/categories/bars.png";
-import codingImg from "../public/categories/coding.png";
-import mobileDevelopmentImg from "../public/categories/mobile-development.png";
-import promotionImg from "../public/categories/promotion.png";
-import uxImg from "../public/categories/ux-design.png";
-import webDesignImg from "../public/categories/web-design.png";
-import arrowImg from "../public/images/shape-1.webp";
+import artImg from "../../public/categories/art.png";
+import barsImg from "../../public/categories/bars.png";
+import codingImg from "../../public/categories/coding.png";
+import mobileDevelopmentImg from "../../public/categories/mobile-development.png";
+import promotionImg from "../../public/categories/promotion.png";
+import uxImg from "../../public/categories/ux-design.png";
+import webDesignImg from "../../public/categories/web-design.png";
+import arrowImg from "../../public/images/shape-1.webp";
 import Image, { StaticImageData } from "next/image";
 import { ArrowRight } from "lucide-react";
 
