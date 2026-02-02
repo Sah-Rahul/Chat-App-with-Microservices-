@@ -51,13 +51,7 @@ const menuItems: MenuItem[] = [
     label: "Dashboard",
     path: "/admin/dashboard",
     active: true,
-  },
-  {
-    icon: BarChart3,
-    label: "Analytics",
-    path: "/admin/analytics",
-    active: false,
-  },
+  }, 
   { icon: Users, label: "Students", path: "/admin/students", active: false },
   {
     icon: GraduationCap,
@@ -91,15 +85,7 @@ const menuItems: MenuItem[] = [
     label: "Announcements",
     path: "/admin/announcements",
     active: false,
-  },
-
-  {
-    icon: Bell,
-    label: "Notifications",
-    path: "/admin/notifications",
-    active: false,
-  },
-  { icon: ShoppingCart, label: "Orders", path: "/admin/orders", active: false },
+  }, 
   {
     icon: CreditCard,
     label: "Payments",
