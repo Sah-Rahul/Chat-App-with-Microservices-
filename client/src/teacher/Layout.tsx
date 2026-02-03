@@ -38,21 +38,52 @@ interface MenuItem {
   path: string;
 }
 
-const menuItems: MenuItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/admin/dashboard" },
-  { icon: Users, label: "Students", path: "/admin/students" },
-  { icon: GraduationCap, label: "Teachers", path: "/admin/teachers" },
-  { icon: Layers, label: "Courses", path: "/admin/courses" },
-  { icon: ClipboardList, label: "Enrollments", path: "/admin/enrollments" },
-  { icon: HelpCircle, label: "Quizzes", path: "/admin/quizzes" },
-  { icon: MessagesSquare, label: "Chat", path: "/admin/chat" },
-  { icon: CalendarCheck, label: "Attendance", path: "/admin/attendance" },
-  { icon: Megaphone, label: "Announcements", path: "/admin/announcements" },
-  { icon: CreditCard, label: "Payments", path: "/admin/payments" },
-  { icon: Settings, label: "Settings", path: "/admin/settings" },
+
+export const teacherMenuItems: MenuItem[] = [
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    path: "/teacher/dashboard",
+  },
+  {
+    icon: GraduationCap,
+    label: "My Classes",
+    path: "/teacher/classes",
+  },
+  {
+    icon: ClipboardList,
+    label: "Assignments",
+    path: "/teacher/assignments",
+  },
+  {
+    icon: CalendarCheck,
+    label: "Attendance",
+    path: "/teacher/attendance",
+  },
+  {
+    icon: Layers,
+    label: "Leave Management",
+    path: "/teacher/leave",
+  },
+  {
+    icon: MessagesSquare,
+    label: "Chat",
+    path: "/teacher/chat",
+  },
+  
+  {
+    icon: Megaphone,
+    label: "Announcements",
+    path: "/teacher/announcements",
+  },
+  {
+    icon: Settings,
+    label: "Profile & Settings",
+    path: "/teacher/settings",
+  },
 ];
 
-const AdminLayout = ({ children }: { children: React.ReactNode }) => {
+const TeacherLayout = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(true);
   const pathname = usePathname();
 
@@ -80,7 +111,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
 
           <div className="flex-1 overflow-y-auto overflow-x-hidden py-3">
-            {menuItems.map((item) => {
+            {teacherMenuItems.map((item) => {
               const active = pathname === item.path;
 
               return (
@@ -167,8 +198,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             </div>
           </header>
 
-          <main
-            className={`${pathname === "/admin/chat" ? "pt-16 px-0" : "pt-20 px-6"}`}
+         <main
+            className={`${pathname === "/teacher/chat" ? "pt-16 px-0" : "pt-20 px-6"}`}
           >
             {children}
           </main>
@@ -178,4 +209,4 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default AdminLayout;
+export default TeacherLayout;
