@@ -7,25 +7,23 @@ import { UserRole } from "../@types/enums";
 import { AuthRequest } from "../@types/auth.types";
 
 interface JwtPayload {
-  id: string;
+  _id: string;
 }
 
 export const isAuthenticated = asyncHandler(
   async (req: AuthRequest, _res: Response, next: NextFunction) => {
-    const token =
-      req.cookies?.token || req.headers.authorization?.replace("Bearer ", "");
-
+    const token = req.headers.authorization?.replace("Bearer ", "");
     if (!token) return next(new ApiError(401, "Not authorized, token missing"));
 
-    const secret = process.env.JWT_SECRET_KEY;
-    if (!secret) return next(new ApiError(500, "JWT secret missing"));
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!) as any;
 
-    const decoded = jwt.verify(token, secret) as JwtPayload;
+    const userDoc = await User.findById(decoded.id).select("-password");
+    if (!userDoc) return next(new ApiError(401, "User not found"));
 
-    const user = await User.findById(decoded.id).select("-password");
-    if (!user) return next(new ApiError(401, "User not found"));
-
-    req.user = user;
+    req.user = {
+      _id: userDoc._id.toString(),
+      role: userDoc.role,
+    };
 
     next();
   },

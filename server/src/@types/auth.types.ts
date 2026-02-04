@@ -3,7 +3,7 @@ import { UserRole } from "./enums";
 
  
 export interface AuthUser {
-  id: string;
+  _id: string;
   role: UserRole;
 }
 

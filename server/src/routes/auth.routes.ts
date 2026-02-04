@@ -1,20 +1,33 @@
 import { Router } from "express";
 import {
-  changePassword,
-  getMe,
-  login,
-  logout,
   register,
+  login,
+  getMe,
+  changePassword,
+  logout,
+  refreshToken,
 } from "../controller/auth.controller";
 import { isAuthenticated } from "../middlewares/auth.middleware";
+import { validateRequest } from "../middlewares/validateRequest.middleware";
+import {
+  changePasswordSchema,
+  CreateUserSchema,
+  LoginUserSchema,
+} from "../validation/user.zod";
 
-const authRoutes = Router();
+const router = Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
+router.post("/register", validateRequest(CreateUserSchema), register);
+router.post("/login", validateRequest(LoginUserSchema), login);
+router.post("/refresh", refreshToken);
 
-authRoutes.post("/logout",isAuthenticated, logout);
-authRoutes.get("/me",isAuthenticated, getMe);
-authRoutes.patch("/change-password",isAuthenticated, changePassword);
+router.get("/me", isAuthenticated, getMe);
+router.patch(
+  "/change-password",
+  isAuthenticated,
+  validateRequest(changePasswordSchema),
+  changePassword,
+);
+router.post("/logout", isAuthenticated, logout);
 
-export default authRoutes;
+export default router;
