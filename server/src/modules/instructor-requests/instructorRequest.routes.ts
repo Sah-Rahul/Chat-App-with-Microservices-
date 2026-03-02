@@ -1,71 +1,75 @@
 import express from "express";
 import * as instructorRequestController from "./instructorRequest.controller";
-import {
-  createInstructorRequestSchema,
+import { 
   updateInstructorRequestSchema,
   reviewInstructorRequestSchema,
-  getInstructorRequestsQuerySchema,
+  RegisterInstructorSchema,
+  LoginInstructorSchema, 
 } from "./instructorRequest.zod";
 import { isAuthenticated } from "../../middleware/auth.middleware";
 import { validate } from "../../middleware/validate.middleware";
 import { authorize } from "../../middleware/authorized.middleware";
 import { UserRole } from "../users/user.enums";
+import { upload } from "../../config/multer.config";
 
 const InstructorRequestRoutes = express.Router();
 
+InstructorRequestRoutes.use(isAuthenticated);
+
 InstructorRequestRoutes.post(
-  "/",
-  isAuthenticated,
-  validate(createInstructorRequestSchema),
+  "/register",
+  validate(RegisterInstructorSchema),
+  instructorRequestController.RegisterAsInstructor,
+);
+
+InstructorRequestRoutes.post(
+  "/login",
+  validate(LoginInstructorSchema),
+  instructorRequestController.loginAsInstructor,
+);
+
+InstructorRequestRoutes.post(
+  "/create",
+  upload.array("documents"),
   instructorRequestController.createInstructorRequest,
 );
 
 InstructorRequestRoutes.get(
   "/",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN, UserRole.SUPER_ADMIN),
-  validate(getInstructorRequestsQuerySchema),
+  authorize(
+    UserRole.INSTITUTE_ADMIN,
+    UserRole.INSTRUCTOR,
+    UserRole.SUPER_ADMIN,
+  ),
   instructorRequestController.getAllInstructorRequests,
 );
 
 InstructorRequestRoutes.get(
   "/my-request",
-  isAuthenticated,
   instructorRequestController.getMyInstructorRequest,
 );
 
 InstructorRequestRoutes.get(
   "/:id",
-  isAuthenticated,
   instructorRequestController.getInstructorRequestById,
 );
 
 InstructorRequestRoutes.put(
   "/:id",
-  isAuthenticated,
   validate(updateInstructorRequestSchema),
   instructorRequestController.updateInstructorRequest,
 );
 
 InstructorRequestRoutes.delete(
   "/:id",
-  isAuthenticated,
   instructorRequestController.deleteInstructorRequest,
 );
 
 InstructorRequestRoutes.post(
   "/:id/review",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN),
+  authorize(UserRole.INSTITUTE_ADMIN, UserRole.SUPER_ADMIN),
   validate(reviewInstructorRequestSchema),
   instructorRequestController.reviewInstructorRequest,
-);
-
-InstructorRequestRoutes.post(
-  "/:id/schedule-interview",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN),
-  instructorRequestController.scheduleInterview,
 );
 
 export default InstructorRequestRoutes;

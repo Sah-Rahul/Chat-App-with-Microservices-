@@ -36,15 +36,11 @@ export interface IInstructorRequest extends Document {
     portfolio?: string;
     other?: string;
   };
-  sampleContent?: Array<{
-    type: "video" | "article" | "project";
-    title: string;
-    url: string;
-  }>;
-  documents: Array<{
+  documents?: Array<{
     type: string;
     name: string;
     url: string;
+    publicId: string;
     uploadedAt: Date;
   }>;
   status: InstructorRequestStatus;
@@ -104,22 +100,12 @@ const instructorRequestSchema = new Schema<IInstructorRequest>(
       portfolio: String,
       other: String,
     },
-    sampleContent: [
-      {
-        type: {
-          type: String,
-          enum: ["video", "article", "project"],
-          required: true,
-        },
-        title: { type: String, required: true },
-        url: { type: String, required: true },
-      },
-    ],
     documents: [
       {
         type: { type: String, required: true },
         name: { type: String, required: true },
         url: { type: String, required: true },
+        publicId: { type: String, required: true },
         uploadedAt: { type: Date, default: Date.now },
       },
     ],

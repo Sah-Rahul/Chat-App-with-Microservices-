@@ -1,63 +1,54 @@
 import { z } from "zod";
+import { ExpertiseLevel } from "./instructorRequest.enums";
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,20}$/;
+
+export const RegisterInstructorSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, "Full name must be at least 2 characters")
+    .max(100, "Full name must not exceed 100 characters"),
+
+  email: z.string().regex(emailRegex, "Invalid email format"),
+
+  password: z
+    .string()
+    .regex(
+      passwordRegex,
+      "Password must be 7-20 characters and include uppercase, lowercase, number, and special character",
+    ),
+});
+
+export const LoginInstructorSchema = z.object({
+  email: z.string().regex(emailRegex, "Invalid email format"),
+
+  password: z
+    .string()
+    .regex(
+      passwordRegex,
+      "Password must be 7-20 characters and include uppercase, lowercase, number, and special character",
+    ),
+});
 
 export const createInstructorRequestSchema = z.object({
   body: z.object({
     instituteId: z.string().optional(),
     fullName: z.string().min(3).max(100),
     email: z.string().email(),
-    phone: z.string().min(10),
-    bio: z.string().min(100).max(2000),
-    expertise: z.array(z.string()).min(1),
-    experienceYears: z.number().min(0),
+    phone: z.string().regex(/^[0-9]{10,15}$/, "Phone must be 10-15 digits"),
+    bio: z.string().min(10).max(2000),
+    experienceYears: z.string(),
     expertiseLevel: z.enum(["beginner", "intermediate", "advanced", "expert"]),
-    qualifications: z
-      .array(
-        z.object({
-          degree: z.string(),
-          institution: z.string(),
-          year: z.number(),
-          field: z.string(),
-        }),
-      )
-      .min(1),
-    workExperience: z.array(
-      z.object({
-        designation: z.string(),
-        company: z.string(),
-        from: z.string().datetime(),
-        to: z.string().datetime().optional(),
-        current: z.boolean(),
-        description: z.string().optional(),
-      }),
-    ),
-    achievements: z.array(z.string()).optional(),
-    socialLinks: z
-      .object({
-        linkedin: z.string().url().optional(),
-        youtube: z.string().url().optional(),
-        github: z.string().url().optional(),
-        portfolio: z.string().url().optional(),
-        other: z.string().url().optional(),
-      })
-      .optional(),
-    sampleContent: z
-      .array(
-        z.object({
-          type: z.enum(["video", "article", "project"]),
-          title: z.string(),
-          url: z.string().url(),
-        }),
-      )
-      .optional(),
-    documents: z
-      .array(
-        z.object({
-          type: z.string(),
-          name: z.string(),
-          url: z.string().url(),
-        }),
-      )
-      .min(1),
+
+    expertise: z.string().min(1),
+    qualifications: z.string().min(1),
+    workExperience: z.string().min(1),
+
+    achievements: z.string().optional(),
+    socialLinks: z.string().optional(),
+    sampleContent: z.string().optional(),
   }),
 });
 
@@ -78,23 +69,9 @@ export const updateInstructorRequestSchema = z.object({
 });
 
 export const reviewInstructorRequestSchema = z.object({
-  params: z.object({
-    id: z.string().min(1),
-  }),
-  body: z.object({
-    status: z.enum(["approved", "rejected"]),
-    approvalNotes: z.string().optional(),
-    rejectionReason: z.string().optional(),
-  }),
+  status: z.enum(["approved", "rejected"]),
+  approvalNotes: z.string().optional(),
+  rejectionReason: z.string().optional(),
 });
 
-export const getInstructorRequestsQuerySchema = z.object({
-  query: z.object({
-    status: z.string().optional(),
-    instituteId: z.string().optional(),
-    page: z.string().transform(Number).optional(),
-    limit: z.string().transform(Number).optional(),
-    sortBy: z.string().optional(),
-    sortOrder: z.enum(["asc", "desc"]).optional(),
-  }),
-});
+ 

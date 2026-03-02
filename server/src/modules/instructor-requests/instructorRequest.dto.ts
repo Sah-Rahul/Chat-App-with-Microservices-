@@ -1,3 +1,26 @@
+import { InstructorRequestStatus } from "./instructorRequest.enums";
+
+export interface RegisterInstructorRequestDTO {
+  fullName: string;
+  email: string;
+  phone: string;
+  bio: string;
+  expertise: string[];
+  experienceYears: number;
+  expertiseLevel: string;
+  qualifications: Array<{
+    degree: string;
+    institution: string;
+    year: number;
+    field: string;
+  }>;
+}
+
+export interface LoginInstructorDTO {
+  email: string;
+  password: string;
+}
+
 export interface CreateInstructorRequestDTO {
   instituteId?: string;
   fullName: string;
@@ -25,16 +48,19 @@ export interface CreateInstructorRequestDTO {
   socialLinks?: {
     linkedin?: string;
     youtube?: string;
+    twitter?: string;
+    instagaram?: string;
     github?: string;
     portfolio?: string;
     other?: string;
   };
   sampleContent?: Array<{
-    type: "video" | "article" | "project";
+    type: "video" | "article" | "project" | "image";  
     title: string;
-    url: string;
+    url?: string;  
+    description?: string;  
   }>;
-  documents: Array<{
+  documents?: Array<{
     type: string;
     name: string;
     url: string;
@@ -83,16 +109,20 @@ export interface UpdateInstructorRequestDTO {
 }
 
 export interface ReviewInstructorRequestDTO {
-  status: "approved" | "rejected";
+  status:
+    | InstructorRequestStatus.APPROVED
+    | InstructorRequestStatus.CANCELLED
+    | InstructorRequestStatus.PENDING
+    | InstructorRequestStatus.REJECTED
+    | InstructorRequestStatus.UNDER_REVIEW;
   approvalNotes?: string;
   rejectionReason?: string;
 }
 
-export interface GetInstructorRequestsQueryDTO {
-  status?: string;
-  instituteId?: string;
+export interface GetInstructorRequestsOptions {
   page?: number;
   limit?: number;
+  status?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }
