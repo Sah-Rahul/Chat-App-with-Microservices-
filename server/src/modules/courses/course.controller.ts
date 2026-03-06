@@ -6,6 +6,7 @@ import { ApiResponse } from "../../utils/ApiResponse";
 import { COURSE_MESSAGES } from "./course.constants";
 import { GetCoursesQueryDTO, UpdateCourseDTO } from "./course.dto";
 import { getParam } from "../../utils/getParams";
+import CourseModel from "./course.model";
 
 export const createCourse = asyncHandler(
   async (req: Request, res: Response) => {
@@ -183,5 +184,17 @@ export const toggleBestseller = asyncHandler(
           COURSE_MESSAGES.BESTSELLER_TOGGLED,
         ),
       );
+  },
+);
+
+export const getCourseBySlug = asyncHandler(
+  async (req: Request, res: Response) => {
+    const slug = getParam(req.params.slug);
+
+    const course = await courseService.getCourseBySlugService(slug);
+
+    res
+      .status(HTTP_STATUS.OK)
+      .json(new ApiResponse(HTTP_STATUS.OK, course, COURSE_MESSAGES.FETCHED));
   },
 );

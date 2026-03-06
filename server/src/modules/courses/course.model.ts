@@ -96,7 +96,7 @@ const courseSchema = new Schema<ICourse>(
     curriculum: [
       {
         title: { type: String, required: true },
-        lectures: [{ type: Schema.Types.ObjectId, ref: "Lecture" }],
+        subTitle:  { type: String, required: true },
       },
     ],
 
@@ -114,8 +114,7 @@ const courseSchema = new Schema<ICourse>(
     },
 
     coursePublish: { type: Boolean, default: false },
-    startDate: { type: Date },
-
+    startDate: { type: Date }, 
      
     classDay: {
       type: [{ type: String, enum: Object.values(classDay) }],

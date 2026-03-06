@@ -5,11 +5,6 @@ export interface CreateOrderDTO {
   couponCode?: string;
 }
 
-export interface UpdateOrderDTO {
-  status?: string;
-  notes?: string;
-}
-
 export interface GetOrdersQueryDTO {
   userId?: string;
   status?: string;

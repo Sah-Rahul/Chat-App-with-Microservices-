@@ -24,11 +24,7 @@ const wishlistSchema = new Schema<IWishlist>(
     },
     items: [
       {
-        courseId: {
-          type: Schema.Types.ObjectId,
-          ref: "Course",
-          required: true,
-        },
+        courseId: { type: Schema.Types.ObjectId, ref: "Course", required: true },
         addedAt: { type: Date, default: Date.now },
         notifyOnDiscount: { type: Boolean, default: true },
       },
@@ -41,10 +37,10 @@ const wishlistSchema = new Schema<IWishlist>(
 wishlistSchema.index({ userId: 1 });
 wishlistSchema.index({ "items.courseId": 1 });
 
-// Update totalItems count
 wishlistSchema.pre("save", function (next) {
-  this.totalItems = this.items.length;
+  this.totalItems = this.items.length; 
 });
 
- const WishlistModel = mongoose.model<IWishlist>("Wishlist", wishlistSchema);
-export default WishlistModel
+const WishlistModel = mongoose.model<IWishlist>("Wishlist", wishlistSchema);
+
+export default WishlistModel;

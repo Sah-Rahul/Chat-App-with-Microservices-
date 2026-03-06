@@ -20,10 +20,7 @@ export interface IPayment extends Document {
     bankName?: string;
     walletType?: string;
   };
-  failureReason?: string;
-  refundId?: string;
-  refundAmount?: number;
-  refundedAt?: Date;
+  failureReason?: string;  
   paidAt?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -61,10 +58,7 @@ const paymentSchema = new Schema<IPayment>(
       bankName: String,
       walletType: String,
     },
-    failureReason: String,
-    refundId: String,
-    refundAmount: Number,
-    refundedAt: Date,
+    failureReason: String, 
     paidAt: Date,
   },
   { timestamps: true },

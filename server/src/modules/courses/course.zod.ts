@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { classDay, CourseLanguage, CourseLevel } from "./course.enums";
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
 const toStringArray = (val: unknown): string[] => {
   if (Array.isArray(val)) return val.map(String).filter(Boolean);
   if (typeof val === "string") {
@@ -12,12 +11,16 @@ const toStringArray = (val: unknown): string[] => {
         if (Array.isArray(parsed)) return parsed.map(String).filter(Boolean);
       } catch {}
     }
-    return trimmed.split(",").map((s) => s.trim()).filter(Boolean);
+    return trimmed
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
   }
   return [];
 };
 
-const toEnumArray = <T extends string>(enumObj: Record<string, T>) =>
+const toEnumArray =
+  <T extends string>(enumObj: Record<string, T>) =>
   (val: unknown): T[] => {
     const arr = toStringArray(val);
     return arr.filter((v) => Object.values(enumObj).includes(v as T)) as T[];
@@ -58,7 +61,6 @@ const booleanField = z
   .transform((val) => val === true || val === "true")
   .pipe(z.boolean());
 
-// ─── Create Course Schema ───────────────────────────────────────────────────
 export const createCourseSchema = z.object({
   title: z
     .string()
@@ -74,9 +76,7 @@ export const createCourseSchema = z.object({
     .max(5000, "Description too long")
     .nonempty("Description is required"),
 
-  price: z.coerce
-    .number()
-    .min(0, "Price cannot be negative"),
+  price: z.coerce.number().min(0, "Price cannot be negative"),
 
   discountPercentage: z.coerce.number().min(0).max(100).optional().default(0),
 
@@ -107,17 +107,15 @@ export const createCourseSchema = z.object({
         z.object({
           title: z.string().min(1),
           lectures: z.array(z.string()).optional().default([]),
-        })
-      )
+        }),
+      ),
     )
     .optional()
     .default([]),
 });
 
-// ─── Update Course Schema ───────────────────────────────────────────────────
 export const updateCourseSchema = createCourseSchema.partial();
 
-// ─── Query Schema ──────────────────────────────────────────────────────────
 export const getCoursesQuerySchema = z.object({
   categoryId: z.string().optional(),
   instituteId: z.string().optional(),
@@ -132,6 +130,8 @@ export const getCoursesQuerySchema = z.object({
   isBestseller: booleanField.optional(),
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(50).default(10),
-  sortBy: z.enum(["price", "rating", "totalEnrollments", "createdAt"]).default("createdAt"),
+  sortBy: z
+    .enum(["price", "rating", "totalEnrollments", "createdAt"])
+    .default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });

@@ -11,9 +11,7 @@ export enum PaymentMethod {
   CREDIT_CARD = "credit_card",
   DEBIT_CARD = "debit_card",
   UPI = "upi",
-  NET_BANKING = "net_banking",
-  WALLET = "wallet",
-  EMI = "emi",
+  NET_BANKING = "net_banking", 
 }
 
 export enum PaymentGateway {

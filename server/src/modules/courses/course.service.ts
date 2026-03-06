@@ -71,6 +71,13 @@ export const createCourseService = async (
     ...(previewVideo && { previewVideo }),
   });
 
+  await course.populate({
+    path: "instructorId",
+    select: "firstName image experience bio",
+  });
+
+  return course;
+
   return course;
 };
 
@@ -373,4 +380,16 @@ export const toggleBestsellerService = async (courseId: string) => {
   );
 
   return updated;
+};
+
+export const getCourseBySlugService = async (slug: string) => {
+  const course = await CourseModel.findOne({ slug, coursePublish: true })
+    .populate("categoryId", "name")
+    .populate("instructorId", "firstName lastName avatar bio");
+
+  if (!course) {
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, COURSE_MESSAGES.NOT_FOUND);
+  }
+
+  return course;
 };

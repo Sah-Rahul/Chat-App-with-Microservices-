@@ -30,18 +30,7 @@ export interface ICourseProgress extends Document {
     sectionId: string;
     lectureId: string;
   };
-  quizScores?: Array<{
-    quizId: string;
-    score: number;
-    maxScore: number;
-    attemptedAt: Date;
-  }>;
-  assignmentScores?: Array<{
-    assignmentId: string;
-    score: number;
-    maxScore: number;
-    submittedAt: Date;
-  }>;
+
   certificateEligible: boolean;
   lastAccessedAt: Date;
   createdAt: Date;
@@ -86,22 +75,7 @@ const courseProgressSchema = new Schema<ICourseProgress>(
       sectionId: String,
       lectureId: String,
     },
-    quizScores: [
-      {
-        quizId: String,
-        score: Number,
-        maxScore: Number,
-        attemptedAt: Date,
-      },
-    ],
-    assignmentScores: [
-      {
-        assignmentId: String,
-        score: Number,
-        maxScore: Number,
-        submittedAt: Date,
-      },
-    ],
+
     certificateEligible: { type: Boolean, default: false },
     lastAccessedAt: { type: Date, default: Date.now },
   },

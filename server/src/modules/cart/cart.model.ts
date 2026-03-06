@@ -13,10 +13,7 @@ export interface ICart extends Document {
   userId: mongoose.Types.ObjectId;
   items: ICartItem[];
   subtotal: number;
-  discount: number;
   total: number;
-  couponCode?: string;
-  couponDiscount?: number;
   totalItems: number;
   expiresAt: Date;
   createdAt: Date;
@@ -46,10 +43,7 @@ const cartSchema = new Schema<ICart>(
       },
     ],
     subtotal: { type: Number, default: 0 },
-    discount: { type: Number, default: 0 },
     total: { type: Number, default: 0 },
-    couponCode: { type: String, uppercase: true },
-    couponDiscount: { type: Number, default: 0 },
     totalItems: { type: Number, default: 0 },
     expiresAt: { type: Date, required: true },
   },
@@ -57,22 +51,21 @@ const cartSchema = new Schema<ICart>(
 );
 
 cartSchema.index({ userId: 1 });
-cartSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index
+cartSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-// Calculate totals before saving
 cartSchema.pre("save", function (next) {
   this.totalItems = this.items.length;
   this.subtotal = this.items.reduce(
-    (sum, item) => sum + (item.discountedPrice || item.coursePrice),
+    (sum, item) => sum + (item.discountedPrice ?? item.coursePrice),
     0,
   );
-  this.total = this.subtotal - this.discount - (this.couponDiscount || 0);
+  this.total = this.subtotal;
 
   if (!this.expiresAt) {
-    this.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+    this.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   }
 });
 
 const CartModel = mongoose.model<ICart>("Cart", cartSchema);
 
-export default CartModel
+export default CartModel;

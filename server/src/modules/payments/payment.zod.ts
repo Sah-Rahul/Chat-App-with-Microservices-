@@ -1,37 +1,23 @@
 import { z } from "zod";
 
 export const createPaymentSchema = z.object({
-  body: z.object({
-    orderId: z.string().min(1),
-    amount: z.number().min(1),
-    method: z.enum([
-      "credit_card",
-      "debit_card",
-      "upi",
-      "net_banking",
-      "wallet",
-      "emi",
-    ]),
-    gateway: z.enum(["razorpay", "stripe", "paytm", "phonepe"]),
-  }),
+  orderId: z.string().min(1),
+  amount: z.number().min(1),
+  method: z.enum([
+    "credit_card",
+    "debit_card",
+    "esewa",
+    "net_banking",
+    "wallet",
+    "emi",
+  ]),
+  gateway: z.enum(["razorpay", "stripe", "paytm", "esewa"]),
 });
 
 export const verifyPaymentSchema = z.object({
-  body: z.object({
-    orderId: z.string().min(1),
-    paymentId: z.string().min(1),
-    signature: z.string().min(1),
-  }),
-});
-
-export const refundPaymentSchema = z.object({
-  params: z.object({
-    paymentId: z.string().min(1),
-  }),
-  body: z.object({
-    amount: z.number().min(1).optional(),
-    reason: z.string().min(10),
-  }),
+  orderId: z.string().min(1),
+  paymentId: z.string().min(1),
+  signature: z.string().min(1),
 });
 
 export const getPaymentsQuerySchema = z.object({

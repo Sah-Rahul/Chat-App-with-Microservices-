@@ -1,112 +1,43 @@
 import { Request, Response, NextFunction } from "express";
 import * as enrollmentService from "./enrollment.service";
+import asyncHandler from "../../utils/AsyncHandler";
 
-export const createEnrollment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const createEnrollment = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const getAllEnrollments = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const getAllEnrollments = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const getEnrollmentById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const getEnrollmentById = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const getMyEnrollments = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const getCourseEnrollments = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const getCourseEnrollments = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const getMyCourseEnrollments = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const updateEnrollment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const updateEnrollment = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const revokeEnrollment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const getEnrollmentStatistics = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const extendEnrollment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const checkEnrollment = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const checkEnrollment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const extendEnrollment = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);
 
-export const getEnrollmentStatistics = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-  } catch (error) {
-    next(error);
-  }
-};
+export const revokeEnrollment = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {},
+);

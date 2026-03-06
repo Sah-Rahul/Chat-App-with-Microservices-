@@ -3,7 +3,6 @@ import * as paymentController from "./payment.controller";
 import {
   createPaymentSchema,
   verifyPaymentSchema,
-  refundPaymentSchema,
   getPaymentsQuerySchema,
 } from "./payment.zod";
 import { isAuthenticated } from "../../middleware/auth.middleware";
@@ -13,6 +12,15 @@ import { authorize } from "../../middleware/authorized.middleware";
 
 const paymentRoutes = express.Router();
 
+// ─── Webhook — express.raw() zaroori hai Stripe signature verify ke liye ──────
+// IMPORTANT: yeh route sabse upar hona chahiye, JSON middleware se pehle
+paymentRoutes.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  paymentController.handleWebhook,
+);
+
+ 
 paymentRoutes.post(
   "/",
   isAuthenticated,
@@ -27,6 +35,9 @@ paymentRoutes.post(
   paymentController.verifyPayment,
 );
 
+paymentRoutes.get("/:id", isAuthenticated, paymentController.getPaymentById);
+
+ 
 paymentRoutes.get(
   "/",
   isAuthenticated,
@@ -35,23 +46,11 @@ paymentRoutes.get(
   paymentController.getAllPayments,
 );
 
-paymentRoutes.get("/:id", isAuthenticated, paymentController.getPaymentById);
-
-paymentRoutes.post(
-  "/:paymentId/refund",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN, UserRole.SUPER_ADMIN),
-  validate(refundPaymentSchema),
-  paymentController.refundPayment,
-);
-
 paymentRoutes.get(
   "/statistics/overview",
   isAuthenticated,
   authorize(UserRole.INSTITUTE_ADMIN, UserRole.SUPER_ADMIN),
   paymentController.getPaymentStatistics,
 );
-
-paymentRoutes.post("/webhook", paymentController.handleWebhook);
 
 export default paymentRoutes;

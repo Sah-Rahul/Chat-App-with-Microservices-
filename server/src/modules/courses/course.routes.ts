@@ -92,4 +92,6 @@ courseRoutes.patch(
   courseController.toggleBestseller,
 );
 
+courseRoutes.get("/course/:slug", courseController.getCourseBySlug);
+
 export default courseRoutes;

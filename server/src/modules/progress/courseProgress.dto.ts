@@ -10,18 +10,6 @@ export interface MarkLectureCompleteDTO {
   lectureId: string;
 }
 
-export interface UpdateQuizScoreDTO {
-  quizId: string;
-  score: number;
-  maxScore: number;
-}
-
-export interface UpdateAssignmentScoreDTO {
-  assignmentId: string;
-  score: number;
-  maxScore: number;
-}
-
 export interface GetProgressQueryDTO {
   userId?: string;
   courseId?: string;
