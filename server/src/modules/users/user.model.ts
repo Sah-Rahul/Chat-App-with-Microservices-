@@ -31,6 +31,10 @@ export interface IUser extends Document {
   suspensionReason?: string;
   suspendedBy?: mongoose.Types.ObjectId;
   suspendedAt?: Date;
+
+  cart: [{ type: String }];
+  wishlist: [{ type: String }];
+
   lastLogin?: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -71,6 +75,10 @@ const userSchema = new Schema<IUser>(
     suspensionReason: { type: String, default: "" },
     suspendedBy: { type: Schema.Types.ObjectId, ref: "User" },
     suspendedAt: Date,
+
+    cart: [{ type: String }],
+    wishlist: [{ type: String }],
+
     emailVerificationToken: String,
     emailVerificationExpires: Date,
     passwordResetToken: String,
