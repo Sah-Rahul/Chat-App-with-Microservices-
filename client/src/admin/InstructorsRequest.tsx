@@ -4,7 +4,7 @@ import AdminLayout from "./AdminLayout";
 const InstructorsRequest = () => {
   return (
     <AdminLayout>
-      <div>InstructorsRequest</div>
+      <div className=" min-h-screen p-6">InstructorsRequest</div>
     </AdminLayout>
   );
 };

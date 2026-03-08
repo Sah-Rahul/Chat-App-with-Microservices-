@@ -1,4 +1,4 @@
-import Login from "@/src/components/Login";
+import Login from "@/src/auth/Login";
 
 const loginRoute = () => {
   return <Login />;

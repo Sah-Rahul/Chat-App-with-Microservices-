@@ -2,7 +2,7 @@ import { CorsOptions } from "cors";
 
 export const corsConfig: CorsOptions = {
   origin: (origin, cb) => {
-    const allowed = (process.env.CORS_ORIGINS ?? "")
+    const allowed = (process.env.CLIENT ?? "")
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);

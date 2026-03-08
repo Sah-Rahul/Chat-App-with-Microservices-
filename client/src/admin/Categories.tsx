@@ -1,11 +1,12 @@
-import React from 'react'
-import AdminLayout from './AdminLayout'
+import React from "react";
+import AdminLayout from "./AdminLayout";
 
 const Categories = () => {
   return (
-   <AdminLayout> <div>cate</div></AdminLayout>
+    <AdminLayout>
+      <div className="h-screen p-6">cate</div>
+    </AdminLayout>
+  );
+};
 
-  )
-}
-
-export default Categories
+export default Categories;

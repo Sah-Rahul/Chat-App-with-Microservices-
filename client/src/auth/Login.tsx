@@ -12,16 +12,15 @@ import {
   EyeOff,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { loginApi, LoginDto } from "../Api/services/auth.service";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-const Register = () => {
-  const router = useRouter();
-
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -36,11 +35,22 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("============>", formData);
+
+    try {
+      const response = await loginApi(formData as LoginDto);
+
+      toast.success(response.message);
+
+      router.push("/dashboard");
+
+      console.log("Login response:", response);
+    } catch (err: any) {
+      toast.error(err.message || "Login failed");
+    }
   };
 
   return (
-    <div className="flex min-h-screen w-full font-sans">
+    <div className="flex min-h-screen font-sans">
       <div className="hidden lg:flex w-1/2 bg-[#0F172A] items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-[-20%] right-[-10%] w-125 h-125 rounded-full bg-[#0ab89c] blur-[150px]" />
@@ -58,17 +68,17 @@ const Register = () => {
           </div>
 
           <h1 className="text-5xl font-bold text-white mb-6">
-            Start your journey with{" "}
-            <span className="text-[#0ab89c]">smart learning.</span>
+            Unlock your potential with{" "}
+            <span className="text-[#0ab89c]">innovative learning.</span>
           </h1>
 
           <div className="space-y-6 mt-10">
             <div className="flex gap-4">
               <BookOpen className="h-5 w-5 text-[#0ab89c]" />
               <div>
-                <p className="text-white font-semibold">Learn from Experts</p>
+                <p className="text-white font-semibold">Hands-on Courses</p>
                 <p className="text-sm text-zinc-400">
-                  Curated courses with real-world projects
+                  Learn practical skills through real projects
                 </p>
               </div>
             </div>
@@ -76,9 +86,9 @@ const Register = () => {
             <div className="flex gap-4">
               <LayoutDashboard className="h-5 w-5 text-[#0ab89c]" />
               <div>
-                <p className="text-white font-semibold">Build Your Profile</p>
+                <p className="text-white font-semibold">Grow Your Career</p>
                 <p className="text-sm text-zinc-400">
-                  Track growth & earn certificates
+                  Build a portfolio, earn certificates, and boost your resume
                 </p>
               </div>
             </div>
@@ -86,30 +96,22 @@ const Register = () => {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center bg-white p-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white dark:bg-black">
         <form onSubmit={handleSubmit} className="w-full max-w-105 space-y-8">
           <div className="space-y-3">
-            <h2 className="text-3xl font-bold text-zinc-900">Student login</h2>
-            <p className="text-zinc-500">
-              Login to your account to start learning today.
+            <h2 className="text-3xl font-bold text-zinc-900 dark:text-white">
+              Student Register
+            </h2>
+            <p className="text-zinc-500 dark:text-zinc-400">
+              Create your account to start learning today.
             </p>
           </div>
 
           <div className="grid gap-5">
             <div className="grid gap-2">
-              <Label htmlFor="name">Student Name</Label>
-              <Input
-                id="name"
-                name="name"
-                type="name"
-                placeholder="RahulSah"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="email">Student Email</Label>
+              <Label htmlFor="email" className="dark:text-white">
+                Email
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -117,41 +119,47 @@ const Register = () => {
                 placeholder="rahul@gmail.com"
                 value={formData.email}
                 onChange={handleChange}
+                className="border border-zinc-300 dark:border-zinc-700 dark:bg-black dark:text-white focus:border-[#09b89b] focus:ring-0"
               />
             </div>
 
             <div className="grid gap-2 relative">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="dark:text-white">
+                Password
+              </Label>
               <Input
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
+                placeholder="********"
                 value={formData.password}
                 onChange={handleChange}
-                className="pr-10"
+                className="border border-zinc-300 dark:border-zinc-700 dark:bg-black dark:text-white pr-10 focus:border-[#09b89b] focus:ring-0"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-10 -translate-y-1/2 text-zinc-500 cursor-pointer"
+                className="absolute right-3 top-8 cursor-pointer text-zinc-500 dark:text-zinc-300"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
 
-            <Button type="submit" className="w-full h-12 cursor-pointer">
-              Register
+            <Button
+              type="submit"
+              className="w-full bg-[#09b89b] hover:bg-[#09b89b] h-12 cursor-pointer"
+            >
+              Login
             </Button>
           </div>
 
           <p className="text-center text-sm text-zinc-600">
             I don't have an account?{" "}
             <Link
-              href={"/auth/login"}
+              href={"/auth/register"}
               className="font-bold text-[#0ab89c] cursor-pointer"
             >
-              Sign In
+              Sign Up
             </Link>
           </p>
         </form>
@@ -160,4 +168,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

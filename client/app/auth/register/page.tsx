@@ -1,4 +1,4 @@
-import Register from "@/src/components/Register";
+import Register from "@/src/auth/Register";
 
 const registerRoute = () => {
   return <Register />;

@@ -9,7 +9,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#0a0c12] text-white">
+    <div className="min-h-screen">
       <Sidebar
         collapsed={collapsed}
         setCollapsed={setCollapsed}
@@ -28,7 +28,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
           collapsed ? "lg:pl-17.5" : "lg:pl-60"
         }`}
       >
-        <div className="p-6">{children}</div>
+        <div>{children}</div>
       </main>
     </div>
   );
