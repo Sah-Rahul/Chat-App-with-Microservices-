@@ -1,6 +1,5 @@
 import { axiosInstance } from "../axiosInstance";
 
- 
 export const createCourseApi = async (data: FormData) => {
   try {
     const res = await axiosInstance.post("/course/create", data, {
@@ -12,7 +11,7 @@ export const createCourseApi = async (data: FormData) => {
     return res.data;
   } catch (err: any) {
     throw new Error(
-      err.response?.data?.message || err.message || "Create course failed"
+      err.response?.data?.message || err.message || "Create course failed",
     );
   }
 };
@@ -50,9 +49,6 @@ export const getAllCourseApi = async () => {
   }
 };
 
-
-
-
 export const getCourseByIdApi = async (courseId: string) => {
   try {
     const res = await axiosInstance.get(`/course/${courseId}`);
@@ -74,7 +70,7 @@ export const getCourseBySlugApi = async (slug: string) => {
     );
   }
 };
-
+ 
 export const toggleBestCourseSellerApi = async (courseId: string) => {
   try {
     const res = await axiosInstance.patch(`/course/${courseId}/bestseller`);

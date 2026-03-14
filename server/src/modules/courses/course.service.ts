@@ -20,7 +20,6 @@ export const createCourseService = async (
   data: CreateCourseDTO,
   userId: string,
   thumbnailFile?: Express.Multer.File,
-  previewVideoFile?: Express.Multer.File,
 ) => {
   const user = await UserModel.findById(userId);
 
@@ -46,18 +45,6 @@ export const createCourseService = async (
     "lms/courses/thumbnails",
   );
 
-  let previewVideo: { url: string; publicId: string } | undefined;
-  if (previewVideoFile) {
-    const previewUpload = await uploadToCloudinary(
-      previewVideoFile.buffer,
-      "lms/courses/previews",
-    );
-    previewVideo = {
-      url: previewUpload.secure_url,
-      publicId: previewUpload.public_id,
-    };
-  }
-
   const course = await CourseModel.create({
     ...data,
     instructorId: userId,
@@ -68,15 +55,12 @@ export const createCourseService = async (
       url: thumbnailUpload.secure_url,
       publicId: thumbnailUpload.public_id,
     },
-    ...(previewVideo && { previewVideo }),
   });
 
   await course.populate({
     path: "instructorId",
     select: "firstName image experience bio",
   });
-
-  return course;
 
   return course;
 };
@@ -86,7 +70,6 @@ export const updateCourseService = async (
   userId: string,
   data: UpdateCourseDTO,
   thumbnailFile?: Express.Multer.File,
-  previewVideoFile?: Express.Multer.File,
 ) => {
   const course = await CourseModel.findById(courseId);
 
@@ -119,21 +102,6 @@ export const updateCourseService = async (
     };
   }
 
-  let previewVideoUpdate: { url: string; publicId: string } | undefined;
-  if (previewVideoFile) {
-    if (course.previewVideo?.publicId) {
-      await deleteFromCloudinary(course.previewVideo.publicId);
-    }
-    const previewUpload = await uploadToCloudinary(
-      previewVideoFile.buffer,
-      "lms/courses/previews",
-    );
-    previewVideoUpdate = {
-      url: previewUpload.secure_url,
-      publicId: previewUpload.public_id,
-    };
-  }
-
   const updated = await CourseModel.findByIdAndUpdate(
     courseId,
     {
@@ -141,7 +109,6 @@ export const updateCourseService = async (
       discountedPrice,
       discountPercentage: newDiscountPercentage,
       ...(thumbnailUpdate && { thumbnail: thumbnailUpdate }),
-      ...(previewVideoUpdate && { previewVideo: previewVideoUpdate }),
     },
     { new: true, runValidators: true },
   );
@@ -150,9 +117,7 @@ export const updateCourseService = async (
 };
 
 export const getAllCoursesService = async (query: GetCoursesQueryDTO) => {
-
   const allCourse = await CourseModel.find();
-
   return allCourse;
 };
 
@@ -180,9 +145,6 @@ export const deleteCourseService = async (courseId: string, userId: string) => {
   }
 
   await deleteFromCloudinary(course.thumbnail.publicId);
-  if (course.previewVideo?.publicId) {
-    await deleteFromCloudinary(course.previewVideo.publicId);
-  }
 
   await CourseModel.findByIdAndDelete(courseId);
 };

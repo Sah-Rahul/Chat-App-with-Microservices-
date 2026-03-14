@@ -1,9 +1,9 @@
-export enum CourseStatus { 
+export enum CourseStatus {
   UNDER_REVIEW = "under_review",
   PUBLISHED = "published",
-  UNPUBLISHED = "unpublished", 
+  UNPUBLISHED = "unpublished",
   REJECTED = "rejected",
-  APPROVED = "approved"
+  APPROVED = "approved",
 }
 
 export enum CourseLevel {
@@ -11,12 +11,6 @@ export enum CourseLevel {
   INTERMEDIATE = "intermediate",
   ADVANCED = "advanced",
   ALL_LEVELS = "all_levels",
-}
-
-export enum CourseLanguage {
-  ENGLISH = "english",
-  HINDI = "hindi",
-  NEPALI = "nepali",
 }
 
 export enum classDay {

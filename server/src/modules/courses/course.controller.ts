@@ -5,20 +5,17 @@ import { HTTP_STATUS } from "../../constant/httpStatus";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { COURSE_MESSAGES } from "./course.constants";
 import { GetCoursesQueryDTO, UpdateCourseDTO } from "./course.dto";
-import { getParam } from "../../utils/getParams"; 
-import { getCoursesQuerySchema } from "./course.zod";
+import { getParam } from "../../utils/getParams";
 
 export const createCourse = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = (req as any).user?.userId;
     const thumbnailFile = (req as any).files?.thumbnail?.[0];
-    const previewVideoFile = (req as any).files?.previewVideo?.[0];
 
     const course = await courseService.createCourseService(
       req.body,
       userId,
       thumbnailFile,
-      previewVideoFile,
     );
 
     res
@@ -29,21 +26,18 @@ export const createCourse = asyncHandler(
   },
 );
 
- export const getAllCourses = asyncHandler(
+export const getAllCourses = asyncHandler(
   async (req: Request, res: Response) => {
-
     const query = req.query as unknown as GetCoursesQueryDTO;
 
     const result = await courseService.getAllCoursesService(query);
 
-    res.status(HTTP_STATUS.OK).json(
-      new ApiResponse(
-        HTTP_STATUS.OK,
-        result,
-        COURSE_MESSAGES.FETCHED_ALL
-      )
-    );
-  }
+    res
+      .status(HTTP_STATUS.OK)
+      .json(
+        new ApiResponse(HTTP_STATUS.OK, result, COURSE_MESSAGES.FETCHED_ALL),
+      );
+  },
 );
 
 export const getCourseById = asyncHandler(
@@ -63,7 +57,6 @@ export const updateCourse = asyncHandler(
     const courseId = getParam(req.params.id);
     const userId = (req as any).user?.userId;
     const thumbnailFile = (req as any).files?.thumbnail?.[0];
-    const previewVideoFile = (req as any).files?.previewVideo?.[0];
     const data: UpdateCourseDTO = req.body;
 
     const updated = await courseService.updateCourseService(
@@ -71,7 +64,6 @@ export const updateCourse = asyncHandler(
       userId,
       data,
       thumbnailFile,
-      previewVideoFile,
     );
 
     res

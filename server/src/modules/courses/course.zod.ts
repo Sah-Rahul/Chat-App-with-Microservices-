@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { classDay, CourseLanguage, CourseLevel } from "./course.enums";
+import { classDay, CourseLevel } from "./course.enums";
 
 const toStringArray = (val: unknown): string[] => {
   if (Array.isArray(val)) return val.map(String).filter(Boolean);
@@ -81,7 +81,7 @@ export const createCourseSchema = z.object({
   discountPercentage: z.coerce.number().min(0).max(100).optional().default(0),
 
   level: z.nativeEnum(CourseLevel),
-  language: z.nativeEnum(CourseLanguage),
+  language: z.literal("english"),
   categoryId: z.string().min(1, "categoryId is required"),
 
   learningOutcomes: requiredArrayField,
@@ -121,7 +121,7 @@ export const getCoursesQuerySchema = z.object({
   instructorId: z.string().optional(),
 
   level: z.nativeEnum(CourseLevel).optional(),
-  language: z.nativeEnum(CourseLanguage).optional(),
+  language: z.literal("english"),
 
   status: z.string().optional(),
   search: z.string().optional(),

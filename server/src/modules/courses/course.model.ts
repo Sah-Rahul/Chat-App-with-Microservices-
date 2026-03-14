@@ -1,11 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import slugify from "slugify";
-import {
-  classDay,
-  CourseLanguage,
-  CourseLevel,
-  CourseStatus,
-} from "./course.enums";
+import { classDay, CourseLevel, CourseStatus } from "./course.enums";
 
 export interface ICourse extends Document {
   title: string;
@@ -18,18 +13,13 @@ export interface ICourse extends Document {
     publicId: string;
   };
 
-  previewVideo?: {
-    url: string;
-    publicId: string;
-  };
-
   price: number;
   discountPercentage: number;
   discountedPrice: number;
   currency: string;
 
   level: CourseLevel;
-  language: CourseLanguage;
+  language: string;
 
   curriculum: { title: string; lectures: mongoose.Types.ObjectId[] }[];
 
@@ -49,7 +39,7 @@ export interface ICourse extends Document {
   prerequisites: string[];
   tags: string[];
 
-  classDay: classDay[];         
+  classDay: classDay[];
   certificateEnabled: boolean;
 
   rating: number;
@@ -76,11 +66,6 @@ const courseSchema = new Schema<ICourse>(
       publicId: { type: String, required: true },
     },
 
-    previewVideo: {
-      url: String,
-      publicId: String,
-    },
-
     price: { type: Number, required: true, min: 0 },
     discountPercentage: { type: Number, default: 0, min: 0, max: 100 },
     discountedPrice: { type: Number, default: 0, min: 0 },
@@ -89,14 +74,13 @@ const courseSchema = new Schema<ICourse>(
     level: { type: String, enum: Object.values(CourseLevel), required: true },
     language: {
       type: String,
-      enum: Object.values(CourseLanguage),
-      default: CourseLanguage.ENGLISH,
+      default: "english",
     },
 
     curriculum: [
       {
         title: { type: String, required: true },
-        subTitle:  { type: String, required: true },
+        subTitle: { type: String, required: true },
       },
     ],
 
@@ -104,7 +88,11 @@ const courseSchema = new Schema<ICourse>(
     totalLectures: { type: Number, default: 0 },
     lectures: [{ type: Schema.Types.ObjectId, ref: "Lecture" }],
 
-    categoryId: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+    categoryId: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
     instructorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
     status: {
@@ -114,8 +102,8 @@ const courseSchema = new Schema<ICourse>(
     },
 
     coursePublish: { type: Boolean, default: false },
-    startDate: { type: Date }, 
-     
+    startDate: { type: Date },
+
     classDay: {
       type: [{ type: String, enum: Object.values(classDay) }],
       default: [classDay.SUNDAY],
@@ -151,7 +139,7 @@ courseSchema.pre("save", function (next) {
     this.discountedPrice = Math.round(
       this.price - (this.price * this.discountPercentage) / 100,
     );
-  } 
+  }
 });
 
 courseSchema.index({ slug: 1 });

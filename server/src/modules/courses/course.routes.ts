@@ -13,15 +13,15 @@ import { upload } from "../../config/multer.config";
 
 const courseRoutes = express.Router();
 
-courseRoutes.get(
-  "/",
-  courseController.getAllCourses,
-);
+ 
+courseRoutes.get("/", courseController.getAllCourses);
 
 courseRoutes.get(
   "/instructor/:instructorId",
   courseController.getInstructorCourses,
 );
+
+courseRoutes.get("/slug/:slug", courseController.getCourseBySlug);
 
 courseRoutes.get("/:id", courseController.getCourseById);
 
@@ -90,7 +90,5 @@ courseRoutes.patch(
   authorize(UserRole.SUPER_ADMIN),
   courseController.toggleBestseller,
 );
-
-courseRoutes.get("/course/:slug", courseController.getCourseBySlug);
 
 export default courseRoutes;

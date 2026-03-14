@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllCategoryAPI } from "../Api/services/category.service";
-import { createCourseApi } from "../Api/services/course.service";
+import { createCourseApi, updateCourseApi } from "../Api/services/course.service";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,8 @@ import {
 
 interface AddCourseModalProps {
   onClose: () => void;
+  onSuccess?: () => void;
+  course?: any; // passed → edit mode with auto-fill
 }
 
 interface Category {
@@ -26,9 +28,17 @@ interface Category {
   name: string;
 }
 
-const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
+const AddCourseModal: React.FC<AddCourseModalProps> = ({
+  onClose,
+  onSuccess,
+  course,
+}) => {
+  const isEdit = !!course;
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -42,33 +52,47 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
     tags: "",
     prerequisites: "",
     learningOutcomes: "",
+    status: "under_review",
   });
+
+  // Auto-fill when editing
+  useEffect(() => {
+    if (course) {
+      setFormData({
+        title: course.title ?? "",
+        curriculum: course.curriculum?.[0]?.title ?? "",
+        description: course.description ?? "",
+        price: course.price?.toString() ?? "",
+        discount: course.discountPercentage?.toString() ?? "",
+        category: course.categoryId?._id ?? course.categoryId ?? "",
+        level: course.level ?? "",
+        language: course.language ?? "",
+        tags: course.tags?.join(", ") ?? "",
+        prerequisites: course.prerequisites?.join(", ") ?? "",
+        learningOutcomes: course.learningOutcomes?.join("\n") ?? "",
+        status: course.status ?? "under_review",
+      });
+      if (course.thumbnail?.url) {
+        setThumbnailPreview(course.thumbnail.url);
+      }
+    }
+  }, [course]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const fetchCategories = async () => {
     try {
       const res = await getAllCategoryAPI();
-
-      if (res.data) {
-        setCategories(res.data);
-      }
+      if (res.data) setCategories(res.data);
     } catch (error) {
       console.log("Category fetch error", error);
     }
@@ -80,6 +104,7 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const data = new FormData();
 
       data.append("title", formData.title);
@@ -93,18 +118,24 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
       data.append("tags", formData.tags);
       data.append("prerequisites", formData.prerequisites);
       data.append("learningOutcomes", formData.learningOutcomes);
+      data.append("status", formData.status);
 
       if (thumbnail) {
         data.append("thumbnail", thumbnail);
       }
 
-      const res = await createCourseApi(data);
+      if (isEdit) {
+        await updateCourseApi(course._id, data);
+      } else {
+        await createCourseApi(data);
+      }
 
-      console.log("Course created", res);
-
+      onSuccess?.();
       onClose();
     } catch (error) {
       console.error("Create course error", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -120,9 +151,11 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
 
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-800">
-            Create New Course
+            {isEdit ? "Edit Course" : "Create New Course"}
           </h2>
-          <p className="text-sm text-gray-500">Fill course information below</p>
+          <p className="text-sm text-gray-500">
+            {isEdit ? "Update course information below" : "Fill course information below"}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -176,14 +209,13 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
 
           <div>
             <Label>Category</Label>
-
             <Select
+              value={formData.category}
               onValueChange={(value) => handleSelectChange("category", value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select Category" />
               </SelectTrigger>
-
               <SelectContent>
                 {categories.map((cat) => (
                   <SelectItem key={cat._id} value={cat._id}>
@@ -196,30 +228,65 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
 
           <div>
             <Label>Level</Label>
-
             <Select
+              value={formData.level}
               onValueChange={(value) => handleSelectChange("level", value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select Level" />
               </SelectTrigger>
-
               <SelectContent>
                 <SelectItem value="beginner">Beginner</SelectItem>
                 <SelectItem value="intermediate">Intermediate</SelectItem>
                 <SelectItem value="advanced">Advanced</SelectItem>
+                <SelectItem value="all_levels">All Levels</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div>
             <Label>Language</Label>
-            <Input
-              name="language"
+            <Select
               value={formData.language}
-              onChange={handleChange}
-            />
+              onValueChange={(value) => handleSelectChange("language", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="english">English</SelectItem>
+                <SelectItem value="hindi">Hindi</SelectItem>
+                <SelectItem value="nepali">Nepali</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+
+          {/* Status — only in edit mode (admin review) */}
+          {isEdit && (
+            <div>
+              <Label>
+                Status{" "}
+                <span className="text-xs text-teal-500 font-normal">
+                  (Admin Review)
+                </span>
+              </Label>
+              <Select
+                value={formData.status}
+                onValueChange={(value) => handleSelectChange("status", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="under_review">Under Review</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="published">Published</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                  <SelectItem value="unpublished">Unpublished</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <div>
             <Label>Tags</Label>
@@ -244,29 +311,42 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({ onClose }) => {
             />
           </div>
         </div>
-        <div className="md:col-span-2">
-          <Label>Course Thumbnail</Label>
 
+        <div className="md:col-span-2 mt-5">
+          <Label>Course Thumbnail</Label>
           <Input
             type="file"
             accept="image/*"
             onChange={(e) => {
               if (e.target.files) {
-                setThumbnail(e.target.files[0]);
+                const file = e.target.files[0];
+                setThumbnail(file);
+                setThumbnailPreview(URL.createObjectURL(file));
               }
             }}
           />
+          {/* Preview — shows existing thumbnail in edit mode or new upload */}
+          {thumbnailPreview && (
+            <img
+              src={thumbnailPreview}
+              alt="Thumbnail preview"
+              className="mt-3 h-36 w-full object-cover rounded-lg border border-zinc-200"
+            />
+          )}
         </div>
+
         <div className="flex justify-end gap-3 mt-8 border-t pt-5">
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-
           <Button
             onClick={handleSubmit}
+            disabled={loading}
             className="bg-emerald-600 hover:bg-emerald-700"
           >
-            Create Course
+            {loading
+              ? isEdit ? "Updating..." : "Creating..."
+              : isEdit ? "Update Course" : "Create Course"}
           </Button>
         </div>
       </div>

@@ -30,7 +30,7 @@ export interface Course {
 
 export interface CourseCardProps {
   course: Course;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-  onView?: (id: string) => void;
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onView: (id: string) => void;
 }
