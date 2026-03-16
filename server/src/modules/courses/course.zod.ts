@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { classDay, CourseLevel } from "./course.enums";
+import { CourseLevel } from "./course.enums";
 
 const toStringArray = (val: unknown): string[] => {
   if (Array.isArray(val)) return val.map(String).filter(Boolean);
@@ -64,7 +64,7 @@ const booleanField = z
 export const createCourseSchema = z.object({
   title: z
     .string()
-    .min(10, "Title must be at least 10 characters")
+    .min(3, "Title must be at least 10 characters")
     .max(100, "Title must be at most 100 characters")
     .nonempty("Title is required"),
 
@@ -72,7 +72,7 @@ export const createCourseSchema = z.object({
 
   description: z
     .string()
-    .min(10, "Description must be at least 10 characters")
+    .min(3, "Description must be at least 10 characters")
     .max(5000, "Description too long")
     .nonempty("Description is required"),
 
@@ -84,18 +84,11 @@ export const createCourseSchema = z.object({
   language: z.literal("english"),
   categoryId: z.string().min(1, "categoryId is required"),
 
-  learningOutcomes: requiredArrayField,
+  learningOutcomes: arrayField,
   prerequisites: arrayField,
   tags: arrayField,
 
   certificateEnabled: booleanField.optional().default(false),
-
-  classDay: z
-    .any()
-    .transform(toEnumArray(classDay))
-    .pipe(z.array(z.nativeEnum(classDay)))
-    .optional()
-    .default([classDay.SUNDAY]),
 
   startDate: z.string().optional(),
 

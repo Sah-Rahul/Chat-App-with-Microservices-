@@ -1,4 +1,4 @@
-import { classDay, CourseLanguage, CourseLevel } from "./course.enums";
+import { classDay,  CourseLevel } from "./course.enums";
 
 export interface CreateCourseDTO {
   title: string;
@@ -7,11 +7,12 @@ export interface CreateCourseDTO {
   price: number;
   discountPercentage: number;
   level: CourseLevel;
-  language: CourseLanguage;
+  language: string;
   categoryId: string;
   learningOutcomes: string[];
   prerequisites: string[];
   tags: string[];
+  review: string[];
   certificateEnabled: boolean;
   classDay: classDay[];
   startDate?: string;
@@ -25,7 +26,7 @@ export interface UpdateCourseDTO {
   price?: number;
   discountPercentage?: number;
   level?: CourseLevel;
-  language?: CourseLanguage;
+  language?: string;
   categoryId?: string;
   learningOutcomes?: string[];
   prerequisites?: string[];

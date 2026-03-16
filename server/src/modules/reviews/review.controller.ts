@@ -4,14 +4,18 @@ import { ApiResponse } from "../../utils/ApiResponse";
 import { REVIEW_MESSAGES } from "./review.constants";
 import { HTTP_STATUS } from "../../constant/httpStatus";
 import asyncHandler from "../../utils/AsyncHandler";
+import {
+  UpdateReviewDTO,
+  CreateReviewDTO,
+  GetReviewsQueryDTO,
+} from "./review.dto";
 import { getParam } from "../../utils/getParams";
-import { UpdateReviewDTO } from "./review.dto";
 
-export const createReview = asyncHandler(
-  async (req: Request, res: Response) => {
+export const createReview = asyncHandler(async (req: Request, res: Response) => {
     const userId = (req as any).user?.userId;
+    const data: CreateReviewDTO = req.body;
 
-    const review = await reviewService.createReviewServices(req.body, userId);
+    const review = await reviewService.createReviewServices(data, userId);
 
     res
       .status(HTTP_STATUS.CREATED)
@@ -23,22 +27,12 @@ export const createReview = asyncHandler(
 
 export const getAllReviews = asyncHandler(
   async (req: Request, res: Response) => {
-    const reviews = await reviewService.getAllReviewsService(req.query);
+    const query: GetReviewsQueryDTO = req.query as any;
+    const reviews = await reviewService.getAllReviewsService(query);
+
     res
       .status(HTTP_STATUS.OK)
       .json(new ApiResponse(HTTP_STATUS.OK, reviews, REVIEW_MESSAGES.FETCHED));
-  },
-);
-
-export const getReviewById = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const reviewId = getParam(req.params.id);
-
-    const review = await reviewService.getReviewByIdService(reviewId);
-
-    res
-      .status(HTTP_STATUS.OK)
-      .json(new ApiResponse(HTTP_STATUS.OK, review, REVIEW_MESSAGES.FETCHED));
   },
 );
 
@@ -61,7 +55,7 @@ export const updateReview = asyncHandler(
 );
 
 export const deleteReview = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     const reviewId = getParam(req.params.id);
     const userId = (req as any).user?.userId;
 
@@ -72,4 +66,3 @@ export const deleteReview = asyncHandler(
       .json(new ApiResponse(HTTP_STATUS.OK, review, REVIEW_MESSAGES.DELETED));
   },
 );
-

@@ -7,8 +7,8 @@ export interface IReview extends Document {
   courseId?: mongoose.Types.ObjectId;
   instituteId?: mongoose.Types.ObjectId;
   enrollmentId?: mongoose.Types.ObjectId;
-  title?: string;
   comment: string;
+  rating: number;
   status: ReviewStatus;
   isVerifiedPurchase: boolean;
   createdAt: Date;
@@ -17,17 +17,9 @@ export interface IReview extends Document {
 
 const reviewSchema = new Schema<IReview>(
   {
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
-    type: {
-      type: String,
-      enum: Object.values(ReviewType),
-      required: true,
-    },
+    type: { type: String, enum: Object.values(ReviewType), required: true },
 
     courseId: {
       type: Schema.Types.ObjectId,
@@ -45,21 +37,10 @@ const reviewSchema = new Schema<IReview>(
       },
     },
 
-    enrollmentId: {
-      type: Schema.Types.ObjectId,
-      ref: "Enrollment",
-    },
+    enrollmentId: { type: Schema.Types.ObjectId, ref: "Enrollment" },
 
-    title: {
-      type: String,
-      trim: true,
-    },
-
-    comment: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    comment: { type: String, required: true, trim: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
 
     status: {
       type: String,
@@ -67,31 +48,25 @@ const reviewSchema = new Schema<IReview>(
       default: ReviewStatus.PENDING,
     },
 
-    isVerifiedPurchase: {
-      type: Boolean,
-      default: false,
-    },
+    isVerifiedPurchase: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
 
 reviewSchema.index({ courseId: 1, status: 1 });
 reviewSchema.index({ instituteId: 1, status: 1 });
-
 reviewSchema.index({ userId: 1 });
-
 reviewSchema.index({ createdAt: -1 });
 
 reviewSchema.index(
   { userId: 1, courseId: 1 },
-  { unique: true, partialFilterExpression: { courseId: { $exists: true } } },
+  { unique: true, partialFilterExpression: { courseId: { $exists: true } } }
 );
 
 reviewSchema.index(
   { userId: 1, instituteId: 1 },
-  { unique: true, partialFilterExpression: { instituteId: { $exists: true } } },
+  { unique: true, partialFilterExpression: { instituteId: { $exists: true } } }
 );
 
 const ReviewModel = mongoose.model<IReview>("Review", reviewSchema);
-
 export default ReviewModel;

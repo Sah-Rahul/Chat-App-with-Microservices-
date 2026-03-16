@@ -1,9 +1,7 @@
-export enum CourseStatus {
-  UNDER_REVIEW = "under_review",
+export enum CourseStatus { 
   PUBLISHED = "published",
-  UNPUBLISHED = "unpublished",
-  REJECTED = "rejected",
-  APPROVED = "approved",
+  UNPUBLISHED = "unpublished", 
+  DRAFT = "draft"
 }
 
 export enum CourseLevel {
@@ -13,12 +11,4 @@ export enum CourseLevel {
   ALL_LEVELS = "all_levels",
 }
 
-export enum classDay {
-  MONDAY = "Monday",
-  TUESDAY = "Tuesday",
-  WEDNESDAY = "Wednesday",
-  THURSDAY = "Thursday",
-  FRIDAY = "Friday",
-  SATURDAY = "Saturday",
-  SUNDAY = "Sunday",
-}
+ 

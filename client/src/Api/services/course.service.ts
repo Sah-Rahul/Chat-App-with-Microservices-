@@ -38,24 +38,15 @@ export const deleteCourseApi = async (courseId: string) => {
   }
 };
 
-export const getAllCourseApi = async () => {
+export const getAllCourseApi = async (limit?: number) => {
   try {
-    const res = await axiosInstance.get("/course/");
+    const res = await axiosInstance.get("/course/", {
+      params: { limit },
+    });
     return res.data;
   } catch (err: any) {
     throw new Error(
       err.response?.data?.message || err.message || "Get courses failed",
-    );
-  }
-};
-
-export const getCourseByIdApi = async (courseId: string) => {
-  try {
-    const res = await axiosInstance.get(`/course/${courseId}`);
-    return res.data;
-  } catch (err: any) {
-    throw new Error(
-      err.response?.data?.message || err.message || "Get course failed",
     );
   }
 };
@@ -70,7 +61,7 @@ export const getCourseBySlugApi = async (slug: string) => {
     );
   }
 };
- 
+
 export const toggleBestCourseSellerApi = async (courseId: string) => {
   try {
     const res = await axiosInstance.patch(`/course/${courseId}/bestseller`);

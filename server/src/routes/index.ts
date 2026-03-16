@@ -5,6 +5,7 @@ import wishlistRoutes from "../modules/wishlist/wishlist.routes";
 import categoryRoutes from "../modules/categories/category.routes"; 
 import InstructorRequestRoutes from "../modules/instructor-requests/instructorRequest.routes";
 import courseRoutes from "../modules/courses/course.routes";
+import reviewRoutes from "../modules/reviews/review.routes";
 
 const appRoutes = Router();
 
@@ -15,7 +16,7 @@ appRoutes.use("/course", courseRoutes);
 appRoutes.use("/instructor", InstructorRequestRoutes); 
 // appRoutes.use("/payment", paymentRoutes);
 // appRoutes.use("/course-progress", courseProgressRoutes);
-// appRoutes.use("/review", reviewRoutes);
+appRoutes.use("/review", reviewRoutes);
 // appRoutes.use("/wishlist", wishlistRoutes);
 
 export default appRoutes;

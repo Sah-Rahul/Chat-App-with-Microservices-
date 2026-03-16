@@ -34,3 +34,8 @@ export interface CourseCardProps {
   onDelete: (id: string) => void;
   onView: (id: string) => void;
 }
+
+export interface ReviewSectionProps {
+  courseSlug: string;
+  currentUserName?: string;   
+}

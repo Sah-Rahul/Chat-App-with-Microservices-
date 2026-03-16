@@ -22,8 +22,8 @@ const Course = () => {
 
   const allCourses = async () => {
     try {
-      const response = await getAllCourseApi(); 
-      setcourses(response.data || []);
+      const response = await getAllCourseApi(3); 
+      setcourses((response.data || []).slice(0, 3));
     } catch (error) {
       console.error("Error fetching courses:", error);
     } finally {

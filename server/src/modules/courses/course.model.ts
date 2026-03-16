@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import slugify from "slugify";
-import { classDay, CourseLevel, CourseStatus } from "./course.enums";
+import { CourseLevel, CourseStatus } from "./course.enums";
 
 export interface ICourse extends Document {
   title: string;
@@ -39,9 +39,14 @@ export interface ICourse extends Document {
   prerequisites: string[];
   tags: string[];
 
-  classDay: classDay[];
   certificateEnabled: boolean;
 
+  reviews: {
+    userId: mongoose.Types.ObjectId;
+    rating: number;
+    comment: string;
+    createdAt: Date;
+  }[];
   rating: number;
   totalReviews: number;
   totalEnrollments: number;
@@ -72,15 +77,12 @@ const courseSchema = new Schema<ICourse>(
     currency: { type: String, default: "INR" },
 
     level: { type: String, enum: Object.values(CourseLevel), required: true },
-    language: {
-      type: String,
-      default: "english",
-    },
+    language: { type: String, default: "english" },
 
     curriculum: [
       {
         title: { type: String, required: true },
-        subTitle: { type: String, required: true },
+        lectures: [{ type: Schema.Types.ObjectId, ref: "Lecture" }],
       },
     ],
 
@@ -94,28 +96,33 @@ const courseSchema = new Schema<ICourse>(
       required: true,
     },
     instructorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    instituteId: { type: Schema.Types.ObjectId, ref: "Institute" },
 
     status: {
       type: String,
       enum: Object.values(CourseStatus),
-      default: CourseStatus.UNDER_REVIEW,
+      default: CourseStatus.DRAFT,
     },
 
     coursePublish: { type: Boolean, default: false },
     startDate: { type: Date },
-
-    classDay: {
-      type: [{ type: String, enum: Object.values(classDay) }],
-      default: [classDay.SUNDAY],
-    },
 
     learningOutcomes: [String],
     prerequisites: [String],
     tags: [String],
     certificateEnabled: { type: Boolean, default: false },
 
-    rating: { type: Number, default: 0, min: 0, max: 5 },
+    reviews: [
+      {
+        userId: { type: Schema.Types.ObjectId, ref: "User" },
+        rating: { type: Number, min: 1, max: 5 },
+        comment: { type: String },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    rating: { type: Number, default: 0 },
     totalReviews: { type: Number, default: 0 },
+
     totalEnrollments: { type: Number, default: 0 },
 
     isFeatured: { type: Boolean, default: false },
@@ -139,6 +146,18 @@ courseSchema.pre("save", function (next) {
     this.discountedPrice = Math.round(
       this.price - (this.price * this.discountPercentage) / 100,
     );
+  }
+
+  if (this.reviews && this.reviews.length > 0) {
+    const totalReviews = this.reviews.length;
+    const avgRating =
+      this.reviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews;
+
+    this.rating = parseFloat(avgRating.toFixed(2));
+    this.totalReviews = totalReviews;
+  } else {
+    this.rating = 0;
+    this.totalReviews = 0;
   }
 });
 

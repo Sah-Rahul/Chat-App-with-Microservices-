@@ -48,7 +48,7 @@ export const createCourseService = async (
   const course = await CourseModel.create({
     ...data,
     instructorId: userId,
-    status: CourseStatus.UNDER_REVIEW,
+    status: CourseStatus.DRAFT,
     discountedPrice,
     discountPercentage: data.discountPercentage ?? 0,
     thumbnail: {
@@ -201,7 +201,7 @@ export const unpublishCourseService = async (
     throw new ApiError(HTTP_STATUS.FORBIDDEN, COURSE_MESSAGES.NOT_AUTHORIZED);
   }
 
-  if (course.status === CourseStatus.UNDER_REVIEW) {
+  if (course.status === CourseStatus.UNPUBLISHED) {
     throw new ApiError(
       HTTP_STATUS.BAD_REQUEST,
       "Course is already unpublished",
