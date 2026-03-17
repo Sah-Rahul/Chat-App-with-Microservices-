@@ -37,7 +37,7 @@ const CourseCard = ({ item }: Props) => {
         </div>
 
         <h3 className="text-xl font-extrabold text-slate-900 leading-snug mb-5 hover:text-[#0AB99D] transition-colors cursor-pointer min-h-14">
-          <Link href={`/courses?category=${item.slug}`}>{item.title}</Link>
+          <Link href={`/courses/${item.slug}`}>{item.title}</Link>
         </h3>
 
         <div className="flex items-center justify-between text-gray-600 mb-5">

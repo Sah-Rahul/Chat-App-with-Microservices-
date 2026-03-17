@@ -1,54 +1,103 @@
-import {
-  CreateEnrollmentDTO,
-  UpdateEnrollmentDTO,
-  GetEnrollmentsQueryDTO,
-} from "./enrollment.dto";
+import { HTTP_STATUS } from "../../constant/httpStatus";
+import { ApiError } from "../../utils/ApiError";
+import EnrollmentModel from "./enrollment.model";
+import CourseModel from "../courses/course.model";
+import { CreateEnrollmentDTO, UpdateEnrollmentDTO } from "./enrollment.dto";
+import { EnrollmentStatus, EnrollmentType } from "./enrollment.enums";
+import { ENROLLMENT_MESSAGES } from "./enrollment.constants";
 
 export const createEnrollment = async (
   data: CreateEnrollmentDTO,
   userId: string,
 ) => {
-  // TODO: Create enrollment after payment
-};
+  const course = await CourseModel.findById(data.courseId);
 
-export const getAllEnrollments = async (query: GetEnrollmentsQueryDTO) => {
-  // TODO: Get all enrollments
-};
+  if (!course) {
+    throw new ApiError(
+      HTTP_STATUS.NOT_FOUND,
+      ENROLLMENT_MESSAGES.NOT_FOUND, 
+    );
+  }
 
-export const getEnrollmentById = async (enrollmentId: string) => {
-  // TODO: Get enrollment by ID
+  const existing = await EnrollmentModel.findOne({
+    userId,
+    courseId: data.courseId,
+  });
+
+  if (existing) {
+    throw new ApiError(
+      HTTP_STATUS.BAD_REQUEST,
+      ENROLLMENT_MESSAGES.ALREADY_ENROLLED,
+    );
+  }
+
+  const enrollment = await EnrollmentModel.create({
+    userId,
+    courseId: data.courseId,
+    instituteId: course.categoryId,
+    orderId: data.orderId,
+    type: data.type || EnrollmentType.PAID,
+    status: EnrollmentStatus.ACTIVE,
+    totalLectures: course.totalLectures || 0,
+    enrolledAt: new Date(),
+  });
+
+  await CourseModel.findByIdAndUpdate(data.courseId, {
+    $inc: { totalEnrollments: 1 },
+  });
+
+  return enrollment;
 };
 
 export const getMyEnrollments = async (userId: string) => {
-  // TODO: Get user's enrollments
-};
-
-export const getCourseEnrollments = async (courseId: string) => {
-  // TODO: Get enrollments for a course
-};
-
-export const updateEnrollment = async (
-  enrollmentId: string,
-  data: UpdateEnrollmentDTO,
-) => {
-  // TODO: Update enrollment
-};
-
-export const revokeEnrollment = async (
-  enrollmentId: string,
-  reason: string,
-) => {
-  // TODO: Revoke enrollment access
-};
-
-export const extendEnrollment = async (enrollmentId: string, days: number) => {
-  // TODO: Extend enrollment validity
+  return EnrollmentModel.find({
+    userId,
+    status: EnrollmentStatus.ACTIVE,
+  })
+    .populate("courseId", "title thumbnail price level totalLectures slug")
+    .sort({ enrolledAt: -1 });
 };
 
 export const checkEnrollment = async (userId: string, courseId: string) => {
-  // TODO: Check if user is enrolled in course
+  const enrollment = await EnrollmentModel.findOne({
+    userId,
+    courseId,
+    status: EnrollmentStatus.ACTIVE,
+  });
+
+  return {
+    isEnrolled: !!enrollment,
+    enrollment: enrollment || null,
+  };
 };
 
-export const getEnrollmentStatistics = async (filters: any) => {
-  // TODO: Get enrollment statistics
+export const updateEnrollment = async (
+  userId: string,
+  courseId: string,
+  data: UpdateEnrollmentDTO,
+) => {
+  const enrollment = await EnrollmentModel.findOne({ userId, courseId });
+
+  if (!enrollment) {
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, ENROLLMENT_MESSAGES.NOT_FOUND);
+  }
+
+  if (data.progress !== undefined) {
+    enrollment.progress = data.progress;
+  }
+
+  if (data.completedLectures !== undefined) {
+    enrollment.completedLectures = data.completedLectures;
+  }
+
+  if (enrollment.progress === 100 && !enrollment.completedAt) {
+    enrollment.completedAt = new Date();
+    enrollment.status = EnrollmentStatus.COMPLETED;
+  }
+
+  enrollment.lastAccessedAt = new Date();
+
+  await enrollment.save();
+
+  return enrollment;
 };

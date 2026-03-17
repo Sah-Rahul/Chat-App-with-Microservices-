@@ -72,3 +72,12 @@ export const toggleBestCourseSellerApi = async (courseId: string) => {
     );
   }
 };
+
+export const getInstructorCoursesApi = async (instructorId: string) => {
+  try {
+    const res = await axiosInstance.get(`/course/instructor/${instructorId}`);
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || err.message);
+  }
+};

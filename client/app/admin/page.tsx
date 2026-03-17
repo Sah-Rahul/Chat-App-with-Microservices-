@@ -1,7 +1,7 @@
 import Dashboard from "@/src/admin/Dashboard";
 
-const page = () => {
+const dashboardRoute = () => {
   return <Dashboard />;
 };
 
-export default page;
+export default dashboardRoute;

@@ -23,12 +23,6 @@ userRoutes.put(
 );
 
 userRoutes.get(
-  "/profile/statistics",
-  isAuthenticated,
-  userController.getMyStatistics,
-);
-
-userRoutes.get(
   "/",
   isAuthenticated,
   authorize(UserRole.INSTITUTE_ADMIN, UserRole.SUPER_ADMIN),
@@ -43,35 +37,5 @@ userRoutes.get(
   userController.getUserById,
 );
 
-userRoutes.delete(
-  "/:id",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN),
-  validate(getUserByIdSchema),
-  userController.deleteUser,
-);
-
-userRoutes.patch(
-  "/:id/suspend",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN),
-  validate(suspendUserSchema),
-  userController.suspendUser,
-);
-
-userRoutes.patch(
-  "/:id/activate",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN, UserRole.SUPER_ADMIN),
-  userController.activateUser,
-);
-
-userRoutes.get(
-  "/:id/statistics",
-  isAuthenticated,
-  authorize(UserRole.INSTITUTE_ADMIN, UserRole.SUPER_ADMIN),
-  validate(getUserByIdSchema),
-  userController.getUserStatistics,
-);
-
+ 
 export default userRoutes;

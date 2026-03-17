@@ -121,17 +121,7 @@ export const getAllCoursesService = async (query: GetCoursesQueryDTO) => {
   return allCourse;
 };
 
-export const getCourseByIdService = async (courseId: string) => {
-  const course = await CourseModel.findById(courseId)
-    .populate("categoryId", "name")
-    .populate("instructorId", "firstName lastName avatar bio");
-
-  if (!course) {
-    throw new ApiError(HTTP_STATUS.NOT_FOUND, COURSE_MESSAGES.NOT_FOUND);
-  }
-
-  return course;
-};
+ 
 
 export const deleteCourseService = async (courseId: string, userId: string) => {
   const course = await CourseModel.findById(courseId);

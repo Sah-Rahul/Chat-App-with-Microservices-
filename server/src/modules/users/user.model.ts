@@ -19,7 +19,6 @@ export interface IUser extends Document {
     country?: string;
     pincode?: string;
   };
-  instituteId?: mongoose.Types.ObjectId;
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
   isWelcomeEmailSent: boolean;
@@ -27,10 +26,6 @@ export interface IUser extends Document {
   emailVerificationExpires?: Date;
   passwordResetToken?: string;
   passwordResetExpires?: Date;
-  isSuspended?: boolean;
-  suspensionReason?: string;
-  suspendedBy?: mongoose.Types.ObjectId;
-  suspendedAt?: Date;
 
   cart: [{ type: String }];
   wishlist: [{ type: String }];
@@ -67,14 +62,10 @@ const userSchema = new Schema<IUser>(
       country: String,
       pincode: String,
     },
-    instituteId: { type: Schema.Types.ObjectId, ref: "Institute" },
+
     isEmailVerified: { type: Boolean, default: false },
     isWelcomeEmailSent: { type: Boolean, default: false },
     isPhoneVerified: { type: Boolean, default: false },
-    isSuspended: { type: Boolean, default: false },
-    suspensionReason: { type: String, default: "" },
-    suspendedBy: { type: Schema.Types.ObjectId, ref: "User" },
-    suspendedAt: Date,
 
     cart: [{ type: String }],
     wishlist: [{ type: String }],

@@ -1,19 +1,18 @@
 export interface CreateEnrollmentDTO {
   courseId: string;
   orderId?: string;
-  type: string;
+  type?: string;
   validity?: number;
 }
 
 export interface UpdateEnrollmentDTO {
-  status?: string;
-  validity?: number;
+  progress?: number;           // ✅ ADD
+  completedLectures?: number;  // ✅ ADD
 }
 
 export interface GetEnrollmentsQueryDTO {
   userId?: string;
   courseId?: string;
-  instituteId?: string;
   status?: string;
   type?: string;
   page?: number;

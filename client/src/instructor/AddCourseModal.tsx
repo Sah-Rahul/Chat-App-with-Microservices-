@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { getAllCategoryAPI } from "../Api/services/category.service";
-import { createCourseApi, updateCourseApi } from "../Api/services/course.service";
+import {
+  createCourseApi,
+  updateCourseApi,
+} from "../Api/services/course.service";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,10 +23,10 @@ import {
 interface AddCourseModalProps {
   onClose: () => void;
   onSuccess?: () => void;
-  course?: any; // passed → edit mode with auto-fill
+  course?: any;
 }
 
-interface Category {
+export interface Category {
   _id: string;
   name: string;
 }
@@ -42,7 +45,6 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
 
   const [formData, setFormData] = useState({
     title: "",
-    curriculum: "",
     description: "",
     price: "",
     discount: "",
@@ -55,12 +57,10 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
     status: "under_review",
   });
 
-  // Auto-fill when editing
   useEffect(() => {
     if (course) {
       setFormData({
         title: course.title ?? "",
-        curriculum: course.curriculum?.[0]?.title ?? "",
         description: course.description ?? "",
         price: course.price?.toString() ?? "",
         discount: course.discountPercentage?.toString() ?? "",
@@ -108,7 +108,6 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
       const data = new FormData();
 
       data.append("title", formData.title);
-      data.append("curriculum", formData.curriculum);
       data.append("description", formData.description);
       data.append("price", formData.price);
       data.append("discountPercentage", formData.discount);
@@ -154,7 +153,9 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
             {isEdit ? "Edit Course" : "Create New Course"}
           </h2>
           <p className="text-sm text-gray-500">
-            {isEdit ? "Update course information below" : "Fill course information below"}
+            {isEdit
+              ? "Update course information below"
+              : "Fill course information below"}
           </p>
         </div>
 
@@ -166,15 +167,6 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
               value={formData.title}
               onChange={handleChange}
               placeholder="Complete Frontend Development"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <Label>Curriculum</Label>
-            <Input
-              name="curriculum"
-              value={formData.curriculum}
-              onChange={handleChange}
             />
           </div>
 
@@ -255,38 +247,9 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="english">English</SelectItem>
-                <SelectItem value="hindi">Hindi</SelectItem>
-                <SelectItem value="nepali">Nepali</SelectItem>
               </SelectContent>
             </Select>
           </div>
-
-          {/* Status — only in edit mode (admin review) */}
-          {isEdit && (
-            <div>
-              <Label>
-                Status{" "}
-                <span className="text-xs text-teal-500 font-normal">
-                  (Admin Review)
-                </span>
-              </Label>
-              <Select
-                value={formData.status}
-                onValueChange={(value) => handleSelectChange("status", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="under_review">Under Review</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="published">Published</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                  <SelectItem value="unpublished">Unpublished</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
 
           <div>
             <Label>Tags</Label>
@@ -325,7 +288,7 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
               }
             }}
           />
-          {/* Preview — shows existing thumbnail in edit mode or new upload */}
+
           {thumbnailPreview && (
             <img
               src={thumbnailPreview}
@@ -345,8 +308,12 @@ const AddCourseModal: React.FC<AddCourseModalProps> = ({
             className="bg-emerald-600 hover:bg-emerald-700"
           >
             {loading
-              ? isEdit ? "Updating..." : "Creating..."
-              : isEdit ? "Update Course" : "Create Course"}
+              ? isEdit
+                ? "Updating..."
+                : "Creating..."
+              : isEdit
+                ? "Update Course"
+                : "Create Course"}
           </Button>
         </div>
       </div>

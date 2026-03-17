@@ -25,12 +25,6 @@ export const updateProfile = asyncHandler(
   },
 );
 
-export const getMyStatistics = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {};
-
 export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
   const users = await userService.getAllUsersService();
 
@@ -46,36 +40,4 @@ export const getUserById = asyncHandler(async (req: Request, res: Response) => {
 
   res.status(200).json(new ApiResponse(200, user, "User fetched successfully"));
 });
-
-export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
-  const id = req.params.id as string;
-
-  const user = await userService.deleteUserService(id);
-
-  res.status(200).json(new ApiResponse(200, user, "User deleted successfully"));
-});
-
-export const suspendUser = asyncHandler(async (req: Request, res: Response) => {
-  const id = req.params.id as string;
-  const adminId = (req.user as any).userId;
-  const { reason } = req.body;
-
-  await userService.suspendUserService(id, reason, adminId);
-
-  res.status(200).json({ message: "User suspended successfully" });
-});
-
-export const activateUser = asyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id as string;
-    const adminId = (req.user as any).userId;
-    await userService.activateUserService(id, adminId);
-    res.status(200).json({ message: "User activated successfully" });
-  },
-);
-
-export const getUserStatistics = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {};
+ 

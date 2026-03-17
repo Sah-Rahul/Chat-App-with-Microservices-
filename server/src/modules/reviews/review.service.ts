@@ -84,7 +84,7 @@ export const getAllReviewsService = async (query: GetReviewsQueryDTO) => {
     .sort({ [sortBy]: sortOrder === "asc" ? 1 : -1 })
     .skip(skip)
     .limit(Number(limit))
-    .populate("userId", "firstName lastName avatar") // ✅ name → firstName lastName
+    .populate("userId", "firstName lastName avatar")  
     .populate("courseId", "title");
 
   return {

@@ -10,8 +10,7 @@ const navLinks = [
   { name: "Home", path: "/" },
   { name: "Courses", path: "/courses" },
   { name: "Quizzes", path: "/quizzes" },
-  { name: "Compiler", path: "/compiler" },
-  { name: "Online Counselling", path: "/counselling" },
+  { name: "Compiler", path: "/compiler" }
 ];
 
 export default function Navbar() {

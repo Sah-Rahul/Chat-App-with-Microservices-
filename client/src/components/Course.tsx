@@ -6,15 +6,14 @@ import Image from "next/image";
 import CourseCard from "./CourseCard";
 import { ArrowRight } from "lucide-react";
 
- 
 import shapeImg from "../../public/course/shape-2.webp";
 import courseLine from "../../public/images/courseLine.png";
 import spin from "../../public/images/spin.png";
 
- 
 import { getAllCourseApi } from "../Api/services/course.service";
 import { Course as CourseInterface } from "../interface/course.interface";
 import SkeletonLoading from "./skeletonLoading";
+import Link from "next/link";
 
 const Course = () => {
   const [courses, setcourses] = useState<CourseInterface[]>([]);
@@ -22,7 +21,7 @@ const Course = () => {
 
   const allCourses = async () => {
     try {
-      const response = await getAllCourseApi(3); 
+      const response = await getAllCourseApi(3);
       setcourses((response.data || []).slice(0, 3));
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -30,7 +29,6 @@ const Course = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     allCourses();
   }, []);
@@ -85,7 +83,7 @@ const Course = () => {
       </div>
 
       {loading ? (
-       <SkeletonLoading count={6} />
+        <SkeletonLoading count={6} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10 py-10">
           {courses.map((course) => (
@@ -95,10 +93,12 @@ const Course = () => {
       )}
 
       <div className="flex justify-center pb-20">
-        <Button className="bg-[#0AB99D] hover:bg-[#06705e] cursor-pointer w-56 text-md px-14 py-7 text-white flex items-center gap-2 group">
-          Load More Course
-          <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110" />
-        </Button>
+        <Link href={`/courses`}>
+          <Button className="bg-[#0AB99D] hover:bg-[#06705e] cursor-pointer w-56 text-md px-14 py-7 text-white flex items-center gap-2 group">
+            Load More Course
+            <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-2 group-hover:scale-110" />
+          </Button>
+        </Link>
       </div>
 
       <style>{`
