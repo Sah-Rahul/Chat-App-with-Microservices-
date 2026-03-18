@@ -10,6 +10,7 @@ import { isAuthenticated } from "../../middleware/auth.middleware";
 import { validate } from "../../middleware/validate.middleware";
 import { UserRole } from "./user.enums";
 import { authorize } from "../../middleware/authorized.middleware";
+import { upload } from "../../config/multer.config";
 
 const userRoutes = express.Router();
 
@@ -18,7 +19,7 @@ userRoutes.get("/profile", isAuthenticated, userController.getProfile);
 userRoutes.put(
   "/update/profile",
   isAuthenticated,
-  validate(updateUserSchema),
+  upload.single("avatar"),
   userController.updateProfile,
 );
 
@@ -37,5 +38,4 @@ userRoutes.get(
   userController.getUserById,
 );
 
- 
 export default userRoutes;

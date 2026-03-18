@@ -12,16 +12,6 @@ export const updateUserSchema = z.object({
   gender: z
     .enum([Gender.MALE, Gender.FEMALE, Gender.OTHER, Gender.PREFER_NOT_TO_SAY])
     .optional(),
-  dateOfBirth: z.string().datetime().optional(),
-  address: z
-    .object({
-      street: z.string().optional(),
-      city: z.string().optional(),
-      state: z.string().optional(),
-      country: z.string().optional(),
-      pincode: z.string().optional(),
-    })
-    .optional(),
 });
 
 export const getUsersQuerySchema = z.object({

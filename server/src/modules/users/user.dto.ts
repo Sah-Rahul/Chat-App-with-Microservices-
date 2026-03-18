@@ -13,14 +13,6 @@ export interface UpdateUserDTO {
   phoneNumber?: string;
   avatar?: string;
   gender?: string;
-  dateOfBirth?: Date;
-  address?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    pincode?: string;
-  };
 }
 
 export interface GetUsersQueryDTO {

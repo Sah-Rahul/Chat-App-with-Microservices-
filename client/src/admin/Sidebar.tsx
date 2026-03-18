@@ -12,6 +12,7 @@ import {
   FileText,
   MessageSquare,
   LogOut,
+  UserPenIcon,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -31,8 +32,7 @@ const NAV_ITEMS = [
     badge: null,
     href: "/admin/instructors-request",
   },
-  { icon: FileText, label: "Reports", badge: null, href: "/admin/reports" },
-  { icon: MessageSquare, label: "Messages", badge: 5, href: "/admin/messages" },
+  { icon: UserPenIcon, label: "Profile",   href: "/admin/profile" },
 ];
 
 const BOTTOM_ITEMS = [

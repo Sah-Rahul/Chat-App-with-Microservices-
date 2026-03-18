@@ -9,16 +9,11 @@ export interface IUser extends Document {
   phoneNumber?: string;
   role: UserRole;
   status: UserStatus;
-  avatar?: string;
-  gender?: Gender;
-  dateOfBirth?: Date;
-  address?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    pincode?: string;
+  avatar?: {
+    url: string;
+    publicId: string;
   };
+  gender?: Gender;
   isEmailVerified: boolean;
   isPhoneVerified: boolean;
   isWelcomeEmailSent: boolean;
@@ -52,16 +47,11 @@ const userSchema = new Schema<IUser>(
       enum: Object.values(UserStatus),
       default: UserStatus.ACTIVE,
     },
-    avatar: { type: String },
-    gender: { type: String, enum: Object.values(Gender) },
-    dateOfBirth: { type: Date },
-    address: {
-      street: String,
-      city: String,
-      state: String,
-      country: String,
-      pincode: String,
+    avatar: {
+      url: { type: String },
+      publicId: { type: String },
     },
+    gender: { type: String, enum: Object.values(Gender) },
 
     isEmailVerified: { type: Boolean, default: false },
     isWelcomeEmailSent: { type: Boolean, default: false },

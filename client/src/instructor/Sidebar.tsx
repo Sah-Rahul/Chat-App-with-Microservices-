@@ -45,19 +45,13 @@ const NAV_ITEMS = [
     href: "/instructor/reports",
   },
   {
-    icon: MessageSquare,
-    label: "Messages",
-    badge: 5,
-    href: "/instructor/messages",
-  },
-      {
     icon: UserPenIcon,
-    label: "Profile", 
+    label: "Profile",
     href: "/instructor/profile",
   },
-    {
+  {
     icon: Newspaper,
-    label: "Blogs", 
+    label: "Blogs",
     href: "/instructor/blogs",
   },
 ];

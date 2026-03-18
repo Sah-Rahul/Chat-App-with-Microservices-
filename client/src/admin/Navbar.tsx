@@ -5,10 +5,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Menu,
-  Moon,
   Search,
-  Sun,
+  User,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getProfile } from "../Api/services/user.service";
 
 interface NavbarProps {
   collapsed: boolean;
@@ -17,6 +18,20 @@ interface NavbarProps {
 }
 
 const Navbar = ({ collapsed, setCollapsed, setMobileOpen }: NavbarProps) => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await getProfile();
+        setUser(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProfile();
+  }, []);
+
   return (
     <header
       className={`
@@ -57,25 +72,33 @@ const Navbar = ({ collapsed, setCollapsed, setMobileOpen }: NavbarProps) => {
       </div>
 
       <div className="flex items-center gap-2">
-        <button
-          // onClick={toggleTheme}
-          className="w-8 h-8 rounded-lg text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5 flex items-center justify-center"
-        >
-          {/* {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />} */}
-        </button>
-
         <button className="relative w-8 h-8 rounded-lg text-black/50 dark:text-white/50 hover:bg-black/5 dark:hover:bg-white/5 flex items-center justify-center">
           <Bell size={16} />
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#09b89b] rounded-full" />
         </button>
 
         <div className="flex items-center gap-2 pl-2 border-l border-black/10 dark:border-white/10">
-          <div className="w-7 h-7 rounded-full bg-[#09b89b] flex items-center justify-center text-white text-xs font-semibold">
-            A
+          <div className="w-8 h-8 rounded-full overflow-hidden bg-[#09b89b] flex items-center justify-center shrink-0">
+            {user?.avatar?.url ? (
+              <img
+                src={user.avatar.url}
+                alt="avatar"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-white text-xs font-bold">
+                {user?.firstName?.charAt(0)?.toUpperCase() || (
+                  <User size={14} className="text-white" />
+                )}
+              </span>
+            )}
           </div>
-          <span className="hidden sm:block text-sm text-black dark:text-white">
-            Admin
-          </span>
+
+          <div className="hidden sm:flex flex-col">
+            <span className="text-sm font-semibold text-black dark:text-white leading-none">
+              {user?.firstName} {user?.lastName}
+            </span>
+          </div>
         </div>
       </div>
     </header>

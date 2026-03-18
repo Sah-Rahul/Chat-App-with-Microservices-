@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { deleteFromCloudinary } from "../../config/cloudinary.config";
 import { HTTP_STATUS } from "../../constant/httpStatus";
 import { ApiError } from "../../utils/ApiError";
 import { UpdateUserDTO } from "./user.dto";
@@ -25,6 +25,17 @@ export const updateProfileService = async (
 ) => {
   if (!userId) {
     throw new ApiError(HTTP_STATUS.UNAUTHORIZED, "Unauthorized");
+  }
+
+ 
+  const existingUser = await UserModel.findById(userId);
+  if (!existingUser) {
+    throw new ApiError(HTTP_STATUS.NOT_FOUND, "User not found");
+  }
+
+ 
+  if (data.avatar && existingUser.avatar?.publicId) {
+    await deleteFromCloudinary(existingUser.avatar.publicId);
   }
 
   const user = await UserModel.findByIdAndUpdate(

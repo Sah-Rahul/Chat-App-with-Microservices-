@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import InstructorLayout from "./InstructorLayout";
+import { useEffect, useRef, useState } from "react"; 
 import { getProfile, updateProfile } from "../Api/services/user.service";
 import { Camera, Mail, Phone, User, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import AdminLayout from "./AdminLayout";
 
 const Profile = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -78,17 +78,17 @@ const Profile = () => {
   };
 
   if (loading) return (
-    <InstructorLayout>
+    <AdminLayout>
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin" />
       </div>
-    </InstructorLayout>
+    </AdminLayout>
   );
 
   const avatarUrl = previewImage || profile?.avatar?.url || null;
 
   return (
-    <InstructorLayout>
+    <AdminLayout>
       <div className="p-6 max-w-4xl mx-auto">
 
         {/* Header */}
@@ -281,7 +281,7 @@ const Profile = () => {
 
         </div>
       </div>
-    </InstructorLayout>
+    </AdminLayout>
   );
 };
 

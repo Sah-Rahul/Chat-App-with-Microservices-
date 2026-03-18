@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import * as userService from "./user.service";
 import asyncHandler from "../../utils/AsyncHandler";
 import { ApiResponse } from "../../utils/ApiResponse";
+import { uploadToCloudinary } from "../../config/cloudinary.config";
 
 export const getProfile = asyncHandler(async (req: Request, res: Response) => {
   const userId = (req as any).user?.userId;
@@ -17,6 +18,19 @@ export const updateProfile = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = (req as any).user?.userId;
     const data = req.body;
+
+    
+    if (req.file) {
+      const uploaded = await uploadToCloudinary(
+        req.file.buffer,
+        "lms/users/avatars"
+      );
+      data.avatar = {
+        url: uploaded.secure_url,
+        publicId: uploaded.public_id,
+      };
+    }
+
     const user = await userService.updateProfileService(userId, data);
 
     res

@@ -55,14 +55,8 @@ const Students = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
           <StatCard label="Total Users" value={students.length} />
           <StatCard
-            
             label="Active"
             value={students.filter((s) => s.status === "active").length}
-            
-          />
-          <StatCard
-            label="Suspended"
-            value={students.filter((s) => s.isSuspended).length}
           />
           <StatCard
             label="Verified Email"
