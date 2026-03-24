@@ -1,0 +1,80 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: api_monitoring_postgres
+    environment:
+      POSTGRES_DB: api_monitoring
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: rahul
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./script/init-postgres.sql:/docker-entrypoint-initdb.d/init-postgres.sql
+    networks:
+      - api_monitoring_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d api_monitoring"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:6.0
+    container_name: api_monitoring_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - api_monitoring_network
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: api_monitoring_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: rahul
+      RABBITMQ_DEFAULT_VHOST: api_monitoring
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - api_monitoring_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: api_monitoring_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: rahul
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - api_monitoring_network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  rabbitmq_data:
+  pgadmin_data:
+
+networks:
+  api_monitoring_network:
+    driver: bridge
