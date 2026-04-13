@@ -11,7 +11,7 @@ export class AuthController {
     this.authService = authService;
   }
 
-  async onboardSuperAdmin(req, res, next) {
+  onboardSuperAdmin = async (req, res, next) => {
     try {
       const { username, email, password } = req.body;
 
@@ -43,9 +43,9 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async register(req, res, next) {
+  register = async (req, res, next) => {
     try {
       const { username, email, password, role } = req.body;
       const userData = {
@@ -71,9 +71,9 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async login(req, res, next) {
+  login = async (req, res, next) => {
     try {
       const { username, password } = req.body;
       const { user, token } = await this.authService.login(username, password);
@@ -92,9 +92,9 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async getProfile(req, res, next) {
+  getProfile = async (req, res, next) => {
     try {
       const userId = req.user.userId;
       const result = await this.authService.getProfile(userId);
@@ -111,9 +111,9 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async logout(req, res, next) {
+  logout = async (req, res, next) => {
     try {
       res.clearCookie("authToken");
       res
@@ -122,5 +122,5 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }

@@ -9,9 +9,9 @@ import postgres from "./shared/config/postgres.js";
 import rabbitmq from "./shared/config/rabbitmq.js";
 import config from "./shared/config/index.js";
 
-import errorHandler from "./shared/middlewares/errorHandler.js";
-import ResponseFormatter from "./shared/utils/responseFormatter.js";
+import errorHandler from "./shared/middlewares/errorHandler.js"; 
 import authRouter from "./services/auth/routes/authRoutes.js";
+import clienRoutes from "./services/client/routes/clientRoutes.js";
 
 const app = express();
 
@@ -32,6 +32,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter)
+app.use("/api", clienRoutes)
 
 
 app.use(errorHandler);
